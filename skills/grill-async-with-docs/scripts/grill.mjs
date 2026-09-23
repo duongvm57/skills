@@ -85,7 +85,7 @@ function main(args) {
   Core.validatePacket(packet);
   if (command === 'validate') {
     const spec = packet.questions.filter(q => q.audience === 'spec').length;
-    console.log(`Valid: ${packet.packet_id} v${packet.revision}, ${spec} BA + ${packet.questions.length - spec} DEV questions, readiness=${packet.readiness}.`);
+    console.log(`Structurally valid: ${packet.packet_id} v${packet.revision}, ${spec} BA + ${packet.questions.length - spec} DEV questions; packet-declared readiness=${packet.readiness}.`);
     const cross = packet.questions.filter(q => Core.dependencies(q).some(id => packet.questions.find(x => x.id === id).audience !== q.audience));
     if (cross.length) console.log(`Cross-tab prerequisites: ${cross.map(q => q.id).join(', ')}. Review whether these can be clarified before handoff.`);
     console.log('Structural validation only; review investigation evidence and coverage separately.');

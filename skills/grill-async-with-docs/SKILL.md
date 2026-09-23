@@ -1,7 +1,6 @@
 ---
 name: grill-async-with-docs
 description: Scout specifications and code, then prepare an offline two-tab HTML interview for BA and DEV with answer-dependent questions. Use when consolidating clarification into one asynchronous handoff, separating product decisions from engineering decisions, or reconciling returned answers and updating project documentation.
-compatibility: Node.js 18+ to validate, render, and reconcile packets; a modern browser to fill in the HTML. No server or API key is required.
 ---
 
 # Grill async with docs
@@ -105,7 +104,8 @@ Explain any remaining cross-tab prerequisite in business language.
 
 ### 5. Validate and render
 
-Use the bundled CLI from this skill's directory (absolute paths work):
+Node.js 18 or later is needed to run the following commands. Use the bundled CLI
+from this skill's directory (absolute paths work):
 
 ```bash
 node scripts/grill.mjs validate /path/to/packet.json
@@ -117,12 +117,42 @@ The renderer embeds the engine, styles, and public question data. It strips
 Keep `packet.json` for the agent; hand the HTML to the user. The user chooses how
 to send it to colleagues. Generating this file does not authorize sending it.
 
-Walk through at least: an ordinary path, an alternative path, a multi-parent
-condition, Other / Undecided, and an upstream answer change. Validate the packet
-graph, but also check semantic coverage against the scout log: structural
-validation cannot prove that the right business questions were discovered.
+`validate` checks structure only. Its `readiness` value repeats the field you
+declared in the packet; it does not establish completeness. Never report a packet
+as valid and ready to send based only on `validate`.
 
-Declare **ready to send** only when:
+### 6. Mandatory semantic review gate
+
+Run this gate before reporting **ready to send**; do not wait for the user to ask
+for another review. If the user has to ask you to check again and finds a semantic
+issue, the gate was skipped.
+
+1. **Independent critique.** Re-read the original sources (spec, code, tests), not
+   the question packet, and independently list spec–code conflicts, gaps, and
+   bugs. If a helper agent is available, give it a fresh context with source paths
+   and scope, without the packet; then compare its findings with the packet.
+2. **Coverage reconciliation.** Map every `conflict`, `gap`, and `bug` in
+   `scout_log` and every new finding from step 1 to a question, an `open_items`
+   entry, or a `coverage` entry with a `stop_reason`. Leave no finding orphaned.
+3. **High-impact branch sweep.** For every in-scope action or endpoint, check
+   permissions and record scope (who can see or change which records), deletion,
+   restoration and identifier reuse, money, sessions and security, external
+   integration failures, and concurrency. Record what was checked or unavailable,
+   even when no issue was found.
+4. **Open the actual HTML.** Open the rendered file in a real browser (for example,
+   Playwright) and exercise an ordinary path, an alternative branch, a condition
+   with multiple parents, Other / Undecided, an upstream answer change, and JSON
+   export then import. Calling `engine.js` directly does not replace this check.
+5. **Fix and rerun.** After each packet change, run `validate`, render again, then
+   repeat steps 2–4 for affected parts. Stop only after a complete pass finds no
+   further important issue.
+
+Record the results in `internal.review_gate`: date, source versions, findings from
+steps 1–4, fixes, and anything not checked. If any step cannot be run, set
+`readiness` to `partial`, explain why in `coverage_note`, and do not report the
+packet as ready to send.
+
+Declare **ready to send** only after the gate passes and:
 
 - Significant known gaps have questions or explicit unresolved entries.
 - Every modeled consequential alternative has evidence or a stated limitation.
@@ -131,10 +161,31 @@ Declare **ready to send** only when:
 - No answer is silently assumed; unknown is distinct from not applicable.
 - The user can see remaining coverage limitations (`coverage_note`, `readiness`).
 
-Deliver links to the HTML and packet, and explain: browser autosave is temporary;
-Export answers downloads a portable JSON; Import answers continues the same
-revision. BA → DEV or DEV → BA both work. Parallel copies may require conflict
-choices on import. The HTML itself does not write responses back to its file.
+### 7. Delivery
+
+Temporary directories (`/tmp`, session scratchpads) are for intermediate drafts.
+Save the interview in a stable workspace folder so BA and DEV can find it:
+
+1. Use `clarification-interviews/<feature-slug>/r<revision>/` under the workspace root.
+   Derive `feature-slug` from `packet_id`; if none exists, slugify the feature
+   name. Resolve the workspace root from its top-level workspace instructions;
+   when none exist, use the project root containing the sources being investigated.
+2. Create the directory if needed. If that revision directory already exists,
+   preserve its files and add an incrementing suffix (`r<revision>-2`,
+   `r<revision>-3`, etc.) instead of overwriting it.
+3. Put exactly one `interview.html` in the revision directory. It contains both
+   BA and DEV tabs and is the same file for both roles; do not create separate
+   copies. Put `packet.json` beside it for agent/DEV reconciliation; send only the
+   HTML to respondents.
+4. Read workspace instructions to avoid prohibited folders or external trackers.
+   This skill's default folder is the destination when the project defines no
+   specific output location. Do not ask the user to choose a folder.
+
+Report the absolute path to the folder and the shared HTML. Explain that browser
+autosave is temporary; Export answers downloads a portable JSON; Import answers
+continues the same revision. BA → DEV or DEV → BA both work. Parallel copies may
+require conflict choices on import. The HTML itself does not write responses back
+to its file.
 
 ## Reconcile
 
@@ -173,7 +224,9 @@ after checking semantic equivalence and dependency changes; document the mapping
 
 Report separately:
 
-- **Ready to send**: a reviewable questionnaire for the modeled scope.
+- **Ready to send**: a reviewable questionnaire for the modeled scope that passed
+  the semantic review gate in step 6 and is at the handoff destination in step 7.
+  Structural validation alone is “structurally valid.”
 - **Responses ready for review**: required applicable answers are present and
   structural checks pass. This is a computed form state, not business approval.
 - **Resolved for implementation**: semantic reconciliation and selected-branch

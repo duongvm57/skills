@@ -21,9 +21,13 @@ update decisions that are now clear, and collect any follow-up questions from th
 
 ## BA → DEV workflow
 
-1. The agent creates `packet.json` and `interview.html` from the actual spec and code.
-2. BA opens the HTML and fills in the **BA — Business** tab. Questions appear as
-   their conditions become applicable.
+1. The agent creates `packet.json` and `interview.html` from the actual spec and
+   code, runs the semantic review gate (step 6 in `SKILL.md`), then saves the
+   files under `clarification-interviews/<feature-slug>/r<revision>/` at the workspace root.
+   `/tmp` is only for drafts; the agent creates the folder by this rule without
+   asking where to save it.
+2. BA and DEV use the same HTML file with both tabs. BA opens it and fills in the
+   **BA — Business** tab. Questions appear as their conditions become applicable.
 3. BA clicks **Export answers** to download JSON and sends it with the HTML to DEV.
 4. DEV opens the HTML, clicks **Import answers**, fills in the **DEV — Technical**
    tab, then exports the combined response.
@@ -92,6 +96,12 @@ One handoff is the goal. New rules from BA, unavailable external facts, or
 unexplored alternatives may still require a focused follow-up packet. The HTML
 only runs the prepared questions and conditions; the agent must investigate and
 semantically reconcile the answers.
+
+`validate` and the tests below check structure and engine behavior; they do not
+prove the question packet is complete. Before reporting ready to send, the agent
+must pass the semantic review gate in `SKILL.md`: independently review source
+evidence, reconcile every conflict with a question or open item, sweep high-impact
+branches, exercise the rendered HTML in a browser, and fix and rerun any findings.
 
 ```bash
 node --test tests/core.test.mjs
