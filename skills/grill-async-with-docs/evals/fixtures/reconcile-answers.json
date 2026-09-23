@@ -1,0 +1,324 @@
+{
+  "schema_version": 1,
+  "packet_id": "order-cancellation-demo",
+  "revision": "1",
+  "fingerprint": "66d75cd986a1c55d66331f6ff0c228ada65a8684665f39130ea31dbc818820d9",
+  "exported_at": "2026-09-23T06:47:00.824Z",
+  "respondent": "",
+  "answers": {
+    "S01": {
+      "status": "answered",
+      "value": "whole",
+      "note": "",
+      "answered_by": "Lan / BA",
+      "answer_id": "fb5f8495-862b-4efa-96ee-99a672bbdead",
+      "updated_at": "2026-09-23T06:47:00.820Z",
+      "basis": {}
+    },
+    "S02": {
+      "status": "answered",
+      "value": "yes",
+      "note": "",
+      "answered_by": "Lan / BA",
+      "answer_id": "d829e72f-7020-4687-a9f4-c5379499e49f",
+      "updated_at": "2026-09-23T06:47:00.820Z",
+      "basis": {
+        "S01": "fb5f8495-862b-4efa-96ee-99a672bbdead"
+      }
+    },
+    "S03": {
+      "status": "answered",
+      "value": [
+        "new"
+      ],
+      "note": "",
+      "answered_by": "Lan / BA",
+      "answer_id": "6710bf7c-efcf-414a-8d37-91d38a8de3bb",
+      "updated_at": "2026-09-23T06:47:00.815Z",
+      "basis": {
+        "S01": "731c1ae3-c00c-4a9a-9bef-e9d6c1af3cc5"
+      }
+    },
+    "S04": {
+      "status": "answered",
+      "value": "keep",
+      "note": "",
+      "answered_by": "Lan / BA",
+      "answer_id": "0de7b09c-5ba9-465d-82da-8edd4ba911f8",
+      "updated_at": "2026-09-23T06:47:00.815Z",
+      "basis": {
+        "S01": "731c1ae3-c00c-4a9a-9bef-e9d6c1af3cc5"
+      }
+    },
+    "S05": {
+      "status": "answered",
+      "value": "keep",
+      "note": "",
+      "answered_by": "Lan / BA",
+      "answer_id": "e2b304da-5d89-4829-ba27-9ae16202aeb5",
+      "updated_at": "2026-09-23T06:47:00.816Z",
+      "basis": {
+        "S01": "731c1ae3-c00c-4a9a-9bef-e9d6c1af3cc5"
+      }
+    },
+    "S06": {
+      "status": "answered",
+      "value": 3,
+      "note": "",
+      "answered_by": "Lan / BA",
+      "answer_id": "5c37beb7-4326-4b1f-9287-a8e4a4bee895",
+      "updated_at": "2026-09-23T06:47:00.816Z",
+      "basis": {
+        "S01": "731c1ae3-c00c-4a9a-9bef-e9d6c1af3cc5",
+        "S02": "a0bedb0a-9133-4287-8b50-c91a60be7e82"
+      }
+    },
+    "S07": {
+      "status": "answered",
+      "value": [
+        {
+          "role": "Customer",
+          "can_request": "yes",
+          "approval": "Automatic"
+        }
+      ],
+      "note": "",
+      "answered_by": "Lan / BA",
+      "answer_id": "5e14365c-5564-4283-af40-c412d4a2c82f",
+      "updated_at": "2026-09-23T06:47:00.818Z",
+      "basis": {
+        "S01": "731c1ae3-c00c-4a9a-9bef-e9d6c1af3cc5"
+      }
+    },
+    "S08": {
+      "status": "answered",
+      "value": "no",
+      "note": "",
+      "answered_by": "Lan / BA",
+      "answer_id": "efaed726-74ff-42d7-b493-59500369a148",
+      "updated_at": "2026-09-23T06:47:00.821Z",
+      "basis": {
+        "S02": "d829e72f-7020-4687-a9f4-c5379499e49f"
+      }
+    },
+    "T01": {
+      "status": "unknown",
+      "note": "No provider documentation is available; DEV must verify before feasibility can be confirmed.",
+      "answered_by": "Minh / DEV",
+      "answer_id": "ce5dee70-99f2-4ac1-9abc-ec1f4ee33e76",
+      "updated_at": "2026-09-23T06:47:00.824Z",
+      "basis": {}
+    },
+    "T02": {
+      "status": "answered",
+      "value": "async",
+      "note": "",
+      "answered_by": "Minh / DEV",
+      "answer_id": "92177324-c6fd-47c7-b3df-9aa5af2fe1b4",
+      "updated_at": "2026-09-23T06:47:00.824Z",
+      "basis": {
+        "S02": "d829e72f-7020-4687-a9f4-c5379499e49f"
+      }
+    },
+    "T03": {
+      "status": "answered",
+      "value": "Use a persisted idempotency key",
+      "note": "",
+      "answered_by": "Minh / DEV",
+      "answer_id": "5efcfb89-f5ea-4c8b-9b85-7a7ed54636c1",
+      "updated_at": "2026-09-23T06:47:00.819Z",
+      "basis": {
+        "S02": "a0bedb0a-9133-4287-8b50-c91a60be7e82",
+        "T02": "96a13881-e3bf-4036-93ac-5c315659fd7c"
+      }
+    },
+    "T04": {
+      "status": "answered",
+      "value": "Allocate refunds per line",
+      "note": "",
+      "answered_by": "Minh / DEV",
+      "answer_id": "5399bc64-700a-452b-a397-8e48715ff7d0",
+      "updated_at": "2026-09-23T06:47:00.820Z",
+      "basis": {
+        "S01": "731c1ae3-c00c-4a9a-9bef-e9d6c1af3cc5",
+        "S04": "0de7b09c-5ba9-465d-82da-8edd4ba911f8",
+        "S05": "e2b304da-5d89-4829-ba27-9ae16202aeb5"
+      }
+    }
+  },
+  "cleared": {},
+  "history": [
+    {
+      "question_id": "S01",
+      "answer": {
+        "status": "answered",
+        "value": "partial",
+        "note": "",
+        "answered_by": "Lan / BA",
+        "answer_id": "731c1ae3-c00c-4a9a-9bef-e9d6c1af3cc5",
+        "updated_at": "2026-09-23T06:47:00.814Z",
+        "basis": {}
+      },
+      "reason": "edited",
+      "at": "2026-09-23T06:47:00.820Z"
+    },
+    {
+      "question_id": "S02",
+      "answer": {
+        "status": "answered",
+        "value": "yes",
+        "note": "",
+        "answered_by": "Lan / BA",
+        "answer_id": "a0bedb0a-9133-4287-8b50-c91a60be7e82",
+        "updated_at": "2026-09-23T06:47:00.814Z",
+        "basis": {
+          "S01": "731c1ae3-c00c-4a9a-9bef-e9d6c1af3cc5"
+        }
+      },
+      "reason": "edited",
+      "at": "2026-09-23T06:47:00.820Z"
+    },
+    {
+      "question_id": "S08",
+      "answer": {
+        "status": "answered",
+        "value": "yes",
+        "note": "",
+        "answered_by": "Lan / BA",
+        "answer_id": "4dfe1c67-73c6-4d97-b365-e36890b01e2a",
+        "updated_at": "2026-09-23T06:47:00.818Z",
+        "basis": {
+          "S02": "a0bedb0a-9133-4287-8b50-c91a60be7e82"
+        }
+      },
+      "reason": "edited",
+      "at": "2026-09-23T06:47:00.821Z"
+    },
+    {
+      "question_id": "T02",
+      "answer": {
+        "status": "answered",
+        "value": "async",
+        "note": "",
+        "answered_by": "Minh / DEV",
+        "answer_id": "96a13881-e3bf-4036-93ac-5c315659fd7c",
+        "updated_at": "2026-09-23T06:47:00.819Z",
+        "basis": {
+          "S02": "a0bedb0a-9133-4287-8b50-c91a60be7e82"
+        }
+      },
+      "reason": "edited",
+      "at": "2026-09-23T06:47:00.824Z"
+    },
+    {
+      "question_id": "T01",
+      "answer": {
+        "status": "answered",
+        "value": "yes",
+        "note": "",
+        "answered_by": "Minh / DEV",
+        "answer_id": "29a4776d-edc8-4f18-b682-bd32b0dca3bc",
+        "updated_at": "2026-09-23T06:47:00.819Z",
+        "basis": {}
+      },
+      "reason": "edited",
+      "at": "2026-09-23T06:47:00.824Z"
+    }
+  ],
+  "evaluation": {
+    "questions": {
+      "S01": {
+        "state": "answered",
+        "applicability": true,
+        "errors": []
+      },
+      "S02": {
+        "state": "answered",
+        "applicability": true,
+        "errors": []
+      },
+      "S03": {
+        "state": "needs_review",
+        "applicability": true,
+        "errors": []
+      },
+      "S04": {
+        "state": "inactive",
+        "applicability": false,
+        "errors": []
+      },
+      "S05": {
+        "state": "inactive",
+        "applicability": false,
+        "errors": []
+      },
+      "S06": {
+        "state": "needs_review",
+        "applicability": true,
+        "errors": []
+      },
+      "S07": {
+        "state": "needs_review",
+        "applicability": true,
+        "errors": []
+      },
+      "S08": {
+        "state": "answered",
+        "applicability": true,
+        "errors": []
+      },
+      "S09": {
+        "state": "pending",
+        "applicability": null,
+        "errors": []
+      },
+      "T01": {
+        "state": "unknown",
+        "applicability": true,
+        "errors": []
+      },
+      "T02": {
+        "state": "answered",
+        "applicability": true,
+        "errors": []
+      },
+      "T03": {
+        "state": "needs_review",
+        "applicability": true,
+        "errors": []
+      },
+      "T04": {
+        "state": "inactive",
+        "applicability": false,
+        "errors": []
+      }
+    },
+    "conflicts": [
+      {
+        "id": "C01",
+        "message": "BA rejected a pending status, but DEV chose background processing. Align on the expected behavior before implementation.",
+        "questions": [
+          "S08",
+          "T02"
+        ]
+      }
+    ],
+    "pending_constraints": [],
+    "counts": {
+      "answered": 4,
+      "needs_review": 4,
+      "inactive": 3,
+      "pending": 1,
+      "unknown": 1
+    },
+    "open": [
+      "S03",
+      "S06",
+      "S07",
+      "S09",
+      "T01",
+      "T03"
+    ],
+    "ready_for_review": false
+  }
+}

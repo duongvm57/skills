@@ -1,0 +1,40 @@
+{
+  "skill_name": "grill-async-with-docs",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Read spec.md, orders.py, and payments.sql in the input directory. Prepare a one-time handoff: an offline HTML file with BA/spec and DEV/tech tabs, follow-up questions that appear based on earlier answers, draft saving, and answer import/export. Investigate plausible branches before asking, including per-item cancellation, and preserve source evidence. State anything that cannot be verified. Do not decide business policy; save all outputs in the designated directory.",
+      "expected_output": "A working two-tab offline HTML file, a conditional packet or question data, and investigation evidence. Ask BA about vouchers, fees, statuses, and cancellation scope; ask DEV about implementation. Do not treat current implementation limits as approved requirements.",
+      "files": [
+        "evals/fixtures/cancellation/spec.md",
+        "evals/fixtures/cancellation/orders.py",
+        "evals/fixtures/cancellation/payments.sql"
+      ],
+      "assertions": [
+        "Explores partial cancellation and asks BA about voucher threshold recalculation and shipping fees, grounded in the supplied implementation.",
+        "Keeps business policy questions in BA and implementation/integration decisions in DEV; current created-only cancellation is not treated as an approved requirement.",
+        "Questions have meaningful conditional routing: scope choice opens multiple relevant follow-ups and paid cancellation opens refund questions.",
+        "Delivers a self-contained offline HTML with BA/DEV tabs, draft save and portable answer import/export.",
+        "Keeps Other/Undecided unresolved and states provider capability is unverified rather than inventing an answer.",
+        "Records inspected sources and coverage limits; recommendations or hypothesized answers are not recorded as accepted decisions."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Review reconcile-packet.json and reconcile-answers.json. Reconcile the BA/DEV responses, identify which decisions can currently be used, which answers need reconfirmation, and any conflicts. Save a report, focused follow-up questions for the right owners, and proposed documentation updates. Do not modify the input files, implement the feature, or treat a completed form as settled business policy. Preserve the original answers and their history.",
+      "expected_output": "The report excludes partial-cancellation answers from current decisions, identifies stale answers after S01 changed, reports the S08/T02 conflict, and keeps T01 unknown. Follow-up questions are focused. Do not create an accepted ADR from an unverified answer.",
+      "files": [
+        "evals/fixtures/reconcile-packet.json",
+        "evals/fixtures/reconcile-answers.json"
+      ],
+      "assertions": [
+        "Identifies whole-order cancellation as the current S01 answer and excludes S04/S05/T04 partial-cancellation answers from effective requirements.",
+        "Identifies stale S03/S06/S07/T03 answers for reconfirmation and does not silently use them as settled decisions.",
+        "Identifies the S08=no and T02=async contradiction and requests an owner decision rather than choosing automatically.",
+        "Keeps T01 provider capabilities unknown and requires verification without inventing provider behavior.",
+        "Produces targeted BA/DEV follow-ups with answer IDs and preserves provenance rather than restarting all decisions.",
+        "Distinguishes structural questionnaire completion from semantic readiness and keeps proposed document changes separate from accepted project decisions."
+      ]
+    }
+  ]
+}

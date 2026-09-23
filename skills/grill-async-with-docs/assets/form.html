@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>__TITLE__ · Requirements clarification</title>
+  <style>__STYLE__</style>
+</head>
+<body>
+  <header class="masthead"><span class="brand-mark" aria-hidden="true">↳</span><span>REQUIREMENTS INTERVIEW</span><span id="version" class="version"></span></header>
+  <main class="workspace">
+    <section class="intro"><p class="eyebrow">Align on the requirements</p><h1 id="title"></h1><p id="intro"></p>
+      <p class="howto">Choose your section and answer the questions that apply. Export your answers for the next person; they can open the same HTML file and import your response.</p>
+      <div id="coverage" class="coverage" hidden></div>
+    </section>
+    <div class="toolbar">
+      <label class="respondent">Your name or team <input id="respondent" autocomplete="name" placeholder="Name or team"></label>
+      <div class="file-actions"><button id="import-button" class="secondary">Import answers</button><input id="import-file" type="file" accept=".json,application/json" hidden><button id="export-button" class="primary">Export answers <span aria-hidden="true">↓</span></button></div>
+    </div>
+    <div id="notice" role="status" aria-live="polite" hidden></div>
+    <div class="work-grid">
+      <aside class="sidebar">
+        <p class="eyebrow">Overall progress</p><p id="progress-text" class="progress-text"></p><progress id="progress" max="1" value="0" aria-label="Answer progress"></progress>
+        <p id="overall-status" class="muted"></p>
+        <div id="sidebar-counts" class="sidebar-counts"></div>
+        <p id="save-status" class="save-status" aria-live="polite"></p>
+        <p class="small muted">The browser draft is stored only on this device. Use the JSON file from “Export answers” to share or keep a durable copy.</p>
+        <details class="history-panel"><summary>Answer history <span id="history-count"></span></summary><div id="history"></div></details>
+      </aside>
+      <section class="interview">
+        <div class="tabs" role="tablist" aria-label="Respondent role"><button id="tab-spec" role="tab" aria-selected="true" aria-controls="panel-spec" data-tab="spec">BA <span>Business</span><small id="count-spec"></small></button><button id="tab-tech" role="tab" aria-selected="false" aria-controls="panel-tech" tabindex="-1" data-tab="tech">DEV <span>Technical</span><small id="count-tech"></small></button></div>
+        <div id="conflicts" class="conflict-list" hidden></div>
+        <div id="panel-spec" role="tabpanel" aria-labelledby="tab-spec"></div>
+        <div id="panel-tech" role="tabpanel" aria-labelledby="tab-tech" hidden></div>
+      </section>
+    </div>
+  </main>
+  <footer>Answer based on what is known. If a decision is still open, choose “Undecided” and name who can confirm it.</footer>
+  <dialog id="merge-dialog" aria-labelledby="merge-title"><h2 id="merge-title">Conflicting answers</h2><p>Choose which answer to keep for each question. Dependent questions will be checked again.</p><div id="merge-items"></div><div class="dialog-actions"><button id="merge-cancel" class="secondary">Cancel import</button><button id="merge-apply" class="primary">Apply choices</button></div><p id="merge-error" role="alert"></p></dialog>
+  <noscript>This form needs JavaScript to show questions and save answers. Open the file in a browser with JavaScript enabled.</noscript>
+  <script id="packet-data" type="application/json">__DATA__</script>
+  <script>__ENGINE__</script>
+  <script>__FORM__</script>
+</body>
+</html>

@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Order cancellation and refunds · Requirements clarification</title>
+  <style>:root{color-scheme:light;--paper:#f4f5fb;--ink:#222a45;--muted:#66718a;--line:#dce1ed;--blue:#4058bd;--blue-light:#edf0fc;--green:#287561;--amber:#8b6026;--red:#a34046;--surface:#fff;font-family:"Segoe UI",Calibri,Arial,sans-serif;font-size:16px;line-height:1.6}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink)}button,input,textarea,select{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.5}button,input,textarea,select{border-radius:8px}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #8a9ee8;outline-offset:3px}button{border:1px solid var(--line);padding:10px 16px;background:var(--surface);color:var(--ink)}button:hover{border-color:#a4b0d4}input,textarea,select{border:1px solid #cbd3e3;background:#fff;padding:10px 12px;color:var(--ink);max-width:100%}textarea{width:100%;resize:vertical;min-height:96px}input[type=radio],input[type=checkbox]{accent-color:var(--blue);flex:none;width:18px;height:18px;margin-top:5px}p{margin:0 0 14px}h1,h2,h3{line-height:1.25}h1{font-family:Cambria,Georgia,serif;font-weight:500;font-size:clamp(32px,4.8vw,48px);letter-spacing:-1px;margin:10px 0 18px;max-width:900px}h2{font-size:24px;margin:0 0 12px}h3{font-size:19px;margin:0}label{display:block}.masthead{display:flex;align-items:center;gap:12px;padding:20px max(24px,calc((100vw - 1200px)/2));background:#e8ecf8;border-bottom:1px solid #d5dcef;font-size:11px;font-weight:700;letter-spacing:1.5px}.brand-mark{font-size:26px;line-height:1;color:var(--blue)}.version{margin-left:auto;font-weight:500;letter-spacing:.3px}.workspace{max-width:1200px;margin:auto;padding:34px 24px}.intro{max-width:970px}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:1.3px;font-weight:700;color:var(--blue);margin:0 0 10px}.howto{font-size:14px;color:var(--muted);max-width:800px}.coverage{border-left:3px solid #baa46c;background:#faf7ee;padding:12px 16px;font-size:14px;margin:20px 0;white-space:pre-wrap}.toolbar{display:flex;align-items:end;justify-content:space-between;gap:20px;padding:24px 0 28px;border-bottom:1px solid var(--line);margin-bottom:28px}.respondent{font-size:12px;font-weight:600;min-width:250px}.respondent input{display:block;font-weight:400;width:100%;margin-top:6px}.file-actions{display:flex;gap:10px}.primary{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}.primary:hover{background:#344caa}.secondary{background:#fff}.work-grid{display:grid;grid-template-columns:228px minmax(0,1fr);gap:32px}.sidebar{align-self:start;position:sticky;top:24px;padding:8px 0}.progress-text{font-size:17px;font-weight:650;margin-bottom:8px}progress{height:7px;width:100%;border:0;border-radius:8px;overflow:hidden;background:var(--line);accent-color:var(--blue)}progress::-webkit-progress-bar{background:var(--line)}progress::-webkit-progress-value{background:var(--blue);border-radius:8px}.muted{color:var(--muted);font-size:13px}.small{font-size:12px}.sidebar-counts{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;margin:20px 0}.count-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0}.save-status{font-size:12px;color:var(--green)}.history-panel{font-size:12px;border-top:1px solid var(--line);padding-top:14px}.history-entry{padding:10px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}.history-entry p{margin:3px 0}.tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:20px}.tabs button{border:0;border-bottom:3px solid transparent;border-radius:8px 8px 0 0;background:transparent;display:flex;gap:9px;align-items:center;padding:14px 18px;font-weight:700}.tabs button span{font-weight:400;font-size:14px}.tabs button small{font-weight:500;background:#e3e7f2;border-radius:12px;padding:0 7px;font-size:11px}.tabs button[aria-selected=true]{background:white;border-bottom-color:var(--blue);color:var(--blue)}.question{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px 26px;margin-bottom:18px;scroll-margin-top:20px;box-shadow:0 2px 3px #29315b03}.question[data-state=answered]{border-left:3px solid #74a493;padding-left:24px}.question[data-state=needs_review],.question[data-state=other],.question[data-state=unknown]{border-left:3px solid #c8a35d;padding-left:24px}.question[data-state=pending]{background:#fafbfe;border-style:dashed}.question-head{display:flex;justify-content:space-between;gap:14px;margin-bottom:10px;align-items:center}.question-id{font-family:Consolas,"Liberation Mono",monospace;font-size:12px;font-weight:600;color:var(--blue)}.badge{font-size:11px;border-radius:14px;background:#eff1f7;color:var(--muted);padding:3px 9px;white-space:nowrap}.badge[data-state=answered]{background:#eaf4ef;color:var(--green)}.badge[data-state=needs_review],.badge[data-state=invalid],.badge[data-state=unknown],.badge[data-state=other]{background:#fbf2df;color:var(--amber)}.owner{font-size:12px;color:var(--muted);margin:8px 0 14px}.question-context{font-size:14px;white-space:pre-wrap}.condition{display:flex;align-items:baseline;gap:8px;padding:8px 11px;background:var(--blue-light);border-radius:6px;margin:14px 0;font-size:12px;flex-wrap:wrap}.condition button{border:0;background:transparent;color:var(--blue);padding:0;text-decoration:underline;font-size:12px}.pending-message{font-size:13px;color:var(--muted);margin:12px 0 0}.question fieldset{border:0;padding:0;margin:16px 0 0;min-width:0}.mode-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:8px 0 15px}.mode-row label{font-size:12px;color:var(--muted)}.mode-row select{margin-left:8px;font-size:12px;padding:6px 9px}.clear-button{border:0;background:none;font-size:12px;padding:4px;color:var(--muted);text-decoration:underline}.options{display:grid;gap:9px}.option{display:flex;gap:11px;border:1px solid var(--line);border-radius:8px;padding:11px 14px;cursor:pointer}.option:has(input:checked){border-color:#7b8cce;background:#f1f3fd}.option-text{flex:1;font-size:14px}.option-detail{display:block;font-size:12px;color:var(--muted);margin-top:4px}.note-label{font-size:12px;margin:16px 0 5px;color:var(--muted)}.answer-note{min-height:64px;font-size:14px}.answer-input{width:100%}.unit{font-size:13px;color:var(--muted);margin-left:10px}.details{font-size:12px;color:var(--muted);margin-top:16px}.details p{margin:8px 0;white-space:pre-wrap}.errors{font-size:12px;color:var(--red);margin-top:10px;white-space:pre-wrap}.reconfirm{background:#fbf5e7;border:1px solid #e6d8b4;border-radius:8px;padding:13px;margin:12px 0;font-size:13px}.reconfirm button{margin-top:8px;font-size:12px}.table-scroll{overflow:auto;max-width:100%;margin-bottom:10px}table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;background:#f0f2f8;color:var(--muted);font-size:11px;font-weight:600;padding:8px}td{padding:7px 4px;border-bottom:1px solid var(--line);vertical-align:top}td input,td select,td textarea{width:100%;min-width:100px;font-size:13px;padding:7px}td textarea{min-height:48px}td button{padding:5px 9px;font-size:12px}.table-add{font-size:12px;padding:7px 12px}.section-label{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:24px 0 10px}.empty{padding:28px;color:var(--muted);border:1px dashed var(--line);border-radius:12px}.conflict-list,#notice{padding:14px 18px;border-radius:8px;margin-bottom:18px;font-size:14px;background:#fff1ef;border:1px solid #e8c9c6}.conflict-list p{margin:4px 0}#notice[data-kind=success]{background:#edf6f0;border-color:#b9d7c5;color:var(--green)}footer{padding:30px 24px;text-align:center;color:var(--muted);font-size:12px}dialog{max-width:740px;width:calc(100% - 36px);border:1px solid var(--line);border-radius:14px;padding:28px;color:var(--ink);max-height:85vh;overflow:auto}dialog::backdrop{background:#17224170}.merge-item{border-top:1px solid var(--line);padding:18px 0}.merge-item label{margin:10px 0;padding:12px;background:var(--paper);border-radius:8px;display:flex;gap:10px}.merge-item pre{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.6 Consolas,monospace;margin:6px 0}.dialog-actions{display:flex;justify-content:flex-end;gap:10px;position:sticky;bottom:-28px;background:#fff;padding:16px 0}#merge-error{color:var(--red);font-size:13px}[hidden]{display:none!important}
+@media(max-width:800px){.work-grid{grid-template-columns:1fr;gap:16px}.sidebar{position:static;display:grid;grid-template-columns:1fr 1fr;gap:0 22px;padding:0}.sidebar>.eyebrow,.sidebar>.progress-text,.sidebar>progress,.sidebar>#overall-status{grid-column:1}.sidebar-counts{grid-column:2;grid-row:1 / span 4;margin:0;padding:0;border:0}.save-status,.sidebar>.small,.history-panel{grid-column:1 / -1}.history-panel{margin-bottom:8px}.toolbar{align-items:stretch}.tabs{position:sticky;top:0;z-index:2;background:var(--paper)}.question{padding:20px}.question[data-state=answered],.question[data-state=needs_review],.question[data-state=other],.question[data-state=unknown]{padding-left:18px}.workspace{padding:26px 18px}.masthead{padding:16px 18px}}
+@media(max-width:520px){.toolbar{flex-direction:column;gap:16px}.file-actions button{flex:1}.tabs button{padding:12px 10px;flex:1;gap:7px}.tabs button span{font-size:12px}.question{padding:18px 16px}.question[data-state=answered],.question[data-state=needs_review],.question[data-state=other],.question[data-state=unknown]{padding-left:14px}.mode-row{align-items:start}.mode-row label{display:grid;gap:5px}.mode-row select{margin-left:0}.version{font-size:10px}.badge{font-size:10px}.masthead{letter-spacing:.8px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+@media print{body{background:white}.masthead,.toolbar,.sidebar,.tabs,footer,.clear-button,.table-add,.reconfirm button{display:none}.workspace{padding:0}.work-grid{display:block}.question{break-inside:avoid;box-shadow:none}.question fieldset{display:block}.question[hidden],#panel-spec[hidden],#panel-tech[hidden]{display:block!important}.question[data-state=inactive]{display:none!important}}
+</style>
+</head>
+<body>
+  <header class="masthead"><span class="brand-mark" aria-hidden="true">↳</span><span>REQUIREMENTS INTERVIEW</span><span id="version" class="version"></span></header>
+  <main class="workspace">
+    <section class="intro"><p class="eyebrow">Align on the requirements</p><h1 id="title"></h1><p id="intro"></p>
+      <p class="howto">Choose your section and answer the questions that apply. Export your answers for the next person; they can open the same HTML file and import your response.</p>
+      <div id="coverage" class="coverage" hidden></div>
+    </section>
+    <div class="toolbar">
+      <label class="respondent">Your name or team <input id="respondent" autocomplete="name" placeholder="Name or team"></label>
+      <div class="file-actions"><button id="import-button" class="secondary">Import answers</button><input id="import-file" type="file" accept=".json,application/json" hidden><button id="export-button" class="primary">Export answers <span aria-hidden="true">↓</span></button></div>
+    </div>
+    <div id="notice" role="status" aria-live="polite" hidden></div>
+    <div class="work-grid">
+      <aside class="sidebar">
+        <p class="eyebrow">Overall progress</p><p id="progress-text" class="progress-text"></p><progress id="progress" max="1" value="0" aria-label="Answer progress"></progress>
+        <p id="overall-status" class="muted"></p>
+        <div id="sidebar-counts" class="sidebar-counts"></div>
+        <p id="save-status" class="save-status" aria-live="polite"></p>
+        <p class="small muted">The browser draft is stored only on this device. Use the JSON file from “Export answers” to share or keep a durable copy.</p>
+        <details class="history-panel"><summary>Answer history <span id="history-count"></span></summary><div id="history"></div></details>
+      </aside>
+      <section class="interview">
+        <div class="tabs" role="tablist" aria-label="Respondent role"><button id="tab-spec" role="tab" aria-selected="true" aria-controls="panel-spec" data-tab="spec">BA <span>Business</span><small id="count-spec"></small></button><button id="tab-tech" role="tab" aria-selected="false" aria-controls="panel-tech" tabindex="-1" data-tab="tech">DEV <span>Technical</span><small id="count-tech"></small></button></div>
+        <div id="conflicts" class="conflict-list" hidden></div>
+        <div id="panel-spec" role="tabpanel" aria-labelledby="tab-spec"></div>
+        <div id="panel-tech" role="tabpanel" aria-labelledby="tab-tech" hidden></div>
+      </section>
+    </div>
+  </main>
+  <footer>Answer based on what is known. If a decision is still open, choose “Undecided” and name who can confirm it.</footer>
+  <dialog id="merge-dialog" aria-labelledby="merge-title"><h2 id="merge-title">Conflicting answers</h2><p>Choose which answer to keep for each question. Dependent questions will be checked again.</p><div id="merge-items"></div><div class="dialog-actions"><button id="merge-cancel" class="secondary">Cancel import</button><button id="merge-apply" class="primary">Apply choices</button></div><p id="merge-error" role="alert"></p></dialog>
+  <noscript>This form needs JavaScript to show questions and save answers. Open the file in a browser with JavaScript enabled.</noscript>
+  <script id="packet-data" type="application/json">{"schema_version":1,"packet_id":"order-cancellation-demo","revision":"1","title":"Order cancellation and refunds","intro":"Agree on cancellation scope, order-value recalculation, and refund behavior before implementation.","coverage_note":"An illustrative example with hypothetical data. For a real project, the agent should inspect the specification and code, then replace these questions with project-specific ones.","readiness":"ready","questions":[{"id":"S01","audience":"spec","owner":"BA / Product","title":"What cancellation scope should customers have?","section":"Cancellation scope","context":"An order can contain multiple items. This answer determines which follow-up rules apply.","type":"single","options":[{"value":"none","label":"Customers cannot cancel orders themselves","detail":"Employees handle cancellations outside the scope of this investigation."},{"value":"whole","label":"Cancel the entire order only"},{"value":"partial","label":"Cancel the entire order or individual items"}]},{"id":"S02","audience":"spec","owner":"BA / Product","title":"Can a paid order be cancelled?","section":"Cancellation scope","type":"single","when":{"question":"S01","op":"in","value":["whole","partial"]},"options":[{"value":"yes","label":"Yes"},{"value":"no","label":"No"}]},{"id":"S03","audience":"spec","owner":"BA / Operations","title":"Which order statuses remain eligible for cancellation?","section":"Cancellation scope","why":"Select every applicable status. If another status applies, choose Other and describe it.","type":"multi","when":{"question":"S01","op":"in","value":["whole","partial"]},"options":[{"value":"new","label":"Created; not yet being prepared"},{"value":"preparing","label":"Being prepared"},{"value":"shipped","label":"Handed to the carrier"}]},{"id":"S04","audience":"spec","owner":"BA / Sales Policy","title":"How should the discount change after a partial cancellation?","section":"Remaining order value","context":"Example: a 600,000 VND order receives a 50,000 VND discount after meeting the 500,000 VND threshold. After one item is cancelled, the remaining items have a list price of only 400,000 VND.","why":"Partial cancellation raises a decision about voucher eligibility. Resolve this rule before calculating the refund amount.","type":"single","when":{"question":"S01","op":"eq","value":"partial"},"options":[{"value":"keep","label":"Keep the applied discount"},{"value":"recalculate","label":"Recalculate the discount based on the remaining items"},{"value":"block","label":"Block partial cancellation if the remaining items no longer qualify for the discount"}]},{"id":"S05","audience":"spec","owner":"BA / Sales Policy","title":"How should shipping fees be handled for partial cancellation?","section":"Remaining order value","context":"If the rule depends on delivery timing or who pays the fee, describe it in the notes.","type":"single","when":{"question":"S01","op":"eq","value":"partial"},"options":[{"value":"keep","label":"Keep the order's shipping fee unchanged"},{"value":"recalculate","label":"Recalculate based on the remaining items"}]},{"id":"S06","audience":"spec","owner":"BA / Finance","title":"After a cancellation is approved, how soon should the refund be issued?","section":"Refunds","context":"Enter the maximum number of days. Use 0 for a same-day refund; specify calendar or business days in the notes.","type":"number","when":{"all":[{"question":"S01","op":"in","value":["whole","partial"]},{"question":"S02","op":"eq","value":"yes"}]},"min":0,"max":30,"unit":"days"},{"id":"S07","audience":"spec","owner":"BA / Operations","title":"How can each role request and approve a cancellation?","section":"Participants","context":"Add one row for each role. Enter its rules in the same row so roles and their count do not need to be predicted in advance.","type":"table","when":{"question":"S01","op":"in","value":["whole","partial"]},"columns":[{"key":"role","label":"Role","type":"text"},{"key":"can_request","label":"Can request cancellation?","type":"single","options":[{"value":"yes","label":"Yes"},{"value":"no","label":"No"}]},{"key":"approval","label":"Approver / approval conditions","type":"text"}]},{"id":"S08","audience":"spec","owner":"BA / Product","title":"Is a “Refund processing” status acceptable?","section":"Refunds","context":"The system has accepted the request but has not received a result from the payment provider. This is a user-experience decision.","type":"single","when":{"question":"S02","op":"eq","value":"yes"},"options":[{"value":"yes","label":"Yes; show the status and update it when the result arrives"},{"value":"no","label":"No; agree on a different behavior before implementation"}]},{"id":"S09","audience":"spec","owner":"BA / Operations","title":"If an order has shipped, what conditions determine whether cancellation is accepted?","section":"Exceptions","context":"Describe who confirms the return, who pays any fees, and when the case moves to the returns process.","type":"text","when":{"question":"S03","op":"contains","value":"shipped"}},{"id":"T01","audience":"tech","owner":"DEV / Payment Integrations","title":"Does the payment provider currently support multiple refunds for one transaction?","section":"Integration capability","context":"This example does not include provider documentation for the agent to verify. DEV should check the contract/API and record the source in the notes; choose Undecided if the information is unavailable.","type":"single","options":[{"value":"yes","label":"Yes, verified"},{"value":"no","label":"No, verified"}]},{"id":"T02","audience":"tech","owner":"DEV / Tech lead","title":"How will the refund flow return its result?","section":"Refund processing","context":"Check the integration capability against the behavior BA requested in S08.","type":"single","when":{"question":"S02","op":"eq","value":"yes"},"options":[{"value":"sync","label":"Process synchronously within the request"},{"value":"async","label":"Accept the request, process it in the background, then update the status"}]},{"id":"T03","audience":"tech","owner":"DEV / Tech lead","title":"How will duplicate refunds be prevented and failures recovered?","section":"Refund processing","context":"Describe the idempotency key, persisted state, retry behavior, and reconciliation process.","type":"text","when":{"question":"S02","op":"eq","value":"yes"},"requires":["T02"]},{"id":"T04","audience":"tech","owner":"DEV / Tech lead","title":"What data changes are needed to represent cancelled items and allocated amounts?","section":"Per-item data","context":"Assumed example behavior: payments are recorded for the whole order. Use the BA's selected rules to propose a representation and check consistency.","type":"text","when":{"question":"S01","op":"eq","value":"partial"},"requires":["S04","S05"]}],"contexts":[],"constraints":[{"id":"C01","when":{"all":[{"question":"S08","op":"eq","value":"no"},{"question":"T02","op":"eq","value":"async"}]},"message":"BA rejected a pending status, but DEV chose background processing. Align on the expected behavior before implementation."}],"fingerprint":"66d75cd986a1c55d66331f6ff0c228ada65a8684665f39130ea31dbc818820d9"}</script>
+  <script>(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.GrillCore = factory();
+})(globalThis, function () {
+  'use strict';
+
+  const own = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
+  const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
+  const clone = v => JSON.parse(JSON.stringify(v));
+  const nonempty = v => typeof v === 'string' && v.trim().length > 0;
+  const primitive = v => ['string', 'boolean'].includes(typeof v) || (typeof v === 'number' && Number.isFinite(v));
+  const identifier = v => typeof v === 'string' && /^[A-Z][A-Z0-9_]*$/.test(v);
+  const safeKey = v => typeof v === 'string' && /^[a-z][a-z0-9_]*$/.test(v) && !['constructor', 'prototype'].includes(v);
+  const TYPES = ['single', 'multi', 'text', 'number', 'table'];
+  const OPS = ['eq', 'ne', 'in', 'contains', 'gt', 'gte', 'lt', 'lte', 'answered'];
+  const INACTIVE = 'inactive-condition';
+  const now = () => new Date().toISOString();
+  const stamp = () => globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+  function canonical(value) {
+    if (Array.isArray(value)) return '[' + value.map(canonical).join(',') + ']';
+    if (object(value)) return '{' + Object.keys(value).sort().map(k => JSON.stringify(k) + ':' + canonical(value[k])).join(',') + '}';
+    return JSON.stringify(value);
+  }
+
+  function refs(condition, kind = 'question') {
+    if (!object(condition)) return [];
+    if (condition.all || condition.any) return [...new Set((condition.all || condition.any).flatMap(c => refs(c, kind)))];
+    if (own(condition, 'not')) return refs(condition.not, kind);
+    return condition[kind] ? [condition[kind]] : [];
+  }
+
+  function dependencies(q) {
+    return [...new Set([...refs(q.when), ...(q.requires || [])])];
+  }
+
+  function topological(packet) {
+    const byId = new Map(packet.questions.map(q => [q.id, q]));
+    const visiting = new Set(), visited = new Set(), result = [];
+    function visit(q) {
+      if (visiting.has(q.id)) throw new Error(`Dependency cycle at ${q.id}`);
+      if (visited.has(q.id)) return;
+      visiting.add(q.id);
+      for (const id of dependencies(q)) {
+        if (!byId.has(id)) throw new Error(`${q.id}: unknown prerequisite ${id}`);
+        visit(byId.get(id));
+      }
+      visiting.delete(q.id); visited.add(q.id); result.push(q);
+    }
+    packet.questions.forEach(visit);
+    return result;
+  }
+
+  function validatePacket(packet) {
+    const errors = [];
+    const check = (ok, message) => { if (!ok) errors.push(message); };
+    const keys = (item, allowed, label) => {
+      for (const k of Object.keys(item)) check(allowed.includes(k), `${label}: unknown property ${k}; put private metadata in internal`);
+    };
+    if (!object(packet)) throw new Error('Packet must be an object');
+    keys(packet, ['schema_version', 'packet_id', 'revision', 'title', 'intro', 'readiness', 'coverage_note', 'contexts', 'questions', 'constraints', 'internal', 'fingerprint'], 'packet');
+    check(packet.schema_version === 1, 'schema_version must be 1');
+    check(typeof packet.packet_id === 'string' && /^[a-z][a-z0-9-]*$/.test(packet.packet_id), 'packet_id must be a lowercase slug');
+    check(nonempty(packet.revision), 'revision must be a nonempty string');
+    check(nonempty(packet.title), 'title is required');
+    check(['ready', 'partial'].includes(packet.readiness), 'readiness must be ready or partial');
+    for (const key of ['intro', 'coverage_note']) if (own(packet, key)) check(typeof packet[key] === 'string', `${key} must be text`);
+    if (packet.readiness === 'partial') check(nonempty(packet.coverage_note), 'partial readiness requires coverage_note');
+    if (!Array.isArray(packet.questions) || !packet.questions.length) throw new Error([...errors, 'questions must be a nonempty array'].join('\n'));
+    const byId = new Map(), facts = new Map();
+    function uniqueId(map, item, label) {
+      check(object(item) && identifier(item.id), `${label}: invalid ID`);
+      if (!object(item)) return;
+      check(!map.has(item.id), `${label}: duplicate ID ${item.id}`);
+      map.set(item.id, item);
+    }
+    if (own(packet, 'contexts')) check(Array.isArray(packet.contexts), 'contexts must be an array');
+    for (const f of Array.isArray(packet.contexts) ? packet.contexts : []) {
+      uniqueId(facts, f, 'context');
+      if (!object(f)) continue;
+      keys(f, ['id', 'label', 'status', 'value', 'internal'], f.id);
+      check(nonempty(f.label), `${f.id}: context label required`);
+      check(['confirmed', 'unknown'].includes(f.status), `${f.id}: invalid context status`);
+      if (f.status === 'confirmed') check(primitive(f.value) || (Array.isArray(f.value) && f.value.every(primitive)), `${f.id}: confirmed context needs a scalar or scalar array`);
+      if (f.status === 'unknown') check(!own(f, 'value'), `${f.id}: unknown context must omit value`);
+    }
+    function validateOptions(item, label) {
+      check(Array.isArray(item.options) && item.options.length > 0, `${label}: options required`);
+      const seen = new Set();
+      for (const opt of Array.isArray(item.options) ? item.options : []) {
+        check(object(opt) && nonempty(opt.value) && nonempty(opt.label), `${label}: options need string value and label`);
+        if (!object(opt)) continue;
+        keys(opt, ['value', 'label', 'detail', 'internal'], label);
+        check(!seen.has(opt.value), `${label}: duplicate option ${opt.value}`); seen.add(opt.value);
+        if (own(opt, 'detail')) check(typeof opt.detail === 'string', `${label}: option detail must be text`);
+      }
+    }
+    for (const q of packet.questions) {
+      uniqueId(byId, q, 'question');
+      if (!object(q)) continue;
+      keys(q, ['id', 'audience', 'owner', 'title', 'section', 'context', 'why', 'recommendation', 'type', 'required', 'allow_other', 'options', 'columns', 'when', 'requires', 'min', 'max', 'unit', 'internal'], q.id);
+      check(!facts.has(q.id), `${q.id}: question and context IDs overlap`);
+      check(['spec', 'tech'].includes(q.audience), `${q.id}: audience must be spec or tech`);
+      check(nonempty(q.title), `${q.id}: title required`);
+      check(nonempty(q.owner), `${q.id}: owner required`);
+      check(TYPES.includes(q.type), `${q.id}: unsupported type`);
+      for (const k of ['context', 'why', 'section', 'recommendation', 'unit']) if (own(q, k)) check(typeof q[k] === 'string', `${q.id}: ${k} must be text`);
+      for (const k of ['required', 'allow_other']) if (own(q, k)) check(typeof q[k] === 'boolean', `${q.id}: ${k} must be boolean`);
+      if (own(q, 'requires')) check(Array.isArray(q.requires) && q.requires.every(identifier), `${q.id}: requires must contain question IDs`);
+      if (['single', 'multi'].includes(q.type)) validateOptions(q, q.id);
+      if (own(q, 'options')) check(['single', 'multi'].includes(q.type), `${q.id}: options only apply to choice questions`);
+      if (own(q, 'columns')) check(q.type === 'table', `${q.id}: columns only apply to tables`);
+      for (const k of ['min', 'max']) if (own(q, k)) check(q.type === 'number' && typeof q[k] === 'number' && Number.isFinite(q[k]), `${q.id}: ${k} needs a numeric question and finite value`);
+      if (own(q, 'min') && own(q, 'max')) check(q.min <= q.max, `${q.id}: min exceeds max`);
+      if (q.type === 'table') {
+        check(Array.isArray(q.columns) && q.columns.length > 0, `${q.id}: table columns required`);
+        const cols = new Set();
+        for (const col of Array.isArray(q.columns) ? q.columns : []) {
+          if (!object(col)) { errors.push(`${q.id}: invalid column`); continue; }
+          keys(col, ['key', 'label', 'type', 'required', 'options', 'internal'], `${q.id}.${col.key}`);
+          check(safeKey(col.key) && !cols.has(col.key), `${q.id}: invalid or duplicate column key`); cols.add(col.key);
+          check(nonempty(col.label), `${q.id}: column label required`);
+          check(['text', 'number', 'single', 'multi'].includes(col.type), `${q.id}: unsupported column type`);
+          if (own(col, 'required')) check(typeof col.required === 'boolean', `${q.id}: column required must be boolean`);
+          if (['single', 'multi'].includes(col.type)) validateOptions(col, `${q.id}.${col.key}`);
+        }
+      }
+    }
+    function condition(c, label) {
+      if (typeof c === 'boolean') return;
+      if (!object(c)) { errors.push(`${label}: invalid condition`); return; }
+      const keys = Object.keys(c);
+      if (own(c, 'all') || own(c, 'any')) {
+        check(keys.length === 1, `${label}: use one condition combinator`);
+        const items = c.all || c.any;
+        check(Array.isArray(items) && items.length > 0, `${label}: all/any requires nonempty array`);
+        if (Array.isArray(items)) items.forEach(x => condition(x, label));
+        return;
+      }
+      if (own(c, 'not')) { check(keys.length === 1, `${label}: not must stand alone`); condition(c.not, label); return; }
+      check(keys.every(k => ['question', 'fact', 'op', 'value'].includes(k)), `${label}: unknown condition property`);
+      check(own(c, 'question') !== own(c, 'fact'), `${label}: choose question or fact`);
+      const target = own(c, 'question') ? byId.get(c.question) : facts.get(c.fact);
+      check(!!target, `${label}: unknown reference ${c.question || c.fact}`);
+      check(OPS.includes(c.op), `${label}: unknown operator ${c.op}`);
+      if (c.op === 'answered') { check(!own(c, 'value'), `${label}: answered omits value`); return; }
+      check(own(c, 'value'), `${label}: operator needs value`);
+      if (c.op === 'in') check(Array.isArray(c.value) && c.value.length > 0 && c.value.every(primitive), `${label}: in needs a scalar array`);
+      else check(primitive(c.value), `${label}: operator needs a scalar value`);
+      if (['gt', 'gte', 'lt', 'lte'].includes(c.op)) {
+        check(typeof c.value === 'number', `${label}: numeric comparison requires number`);
+        if (own(c, 'question') && target) check(target.type === 'number', `${label}: numeric comparison on non-number`);
+      }
+      if (own(c, 'question') && target) {
+        if (target.type === 'table') check(c.op === 'answered', `${label}: tables support answered only`);
+        if (target.type === 'multi') check(c.op === 'contains', `${label}: multi-choice uses contains or answered`);
+        if (c.op === 'contains') check(target.type === 'multi', `${label}: contains needs multi-choice question`);
+        if (['single', 'multi'].includes(target.type)) {
+          const allowed = new Set((target.options || []).map(o => o.value));
+          const values = c.op === 'in' && Array.isArray(c.value) ? c.value : [c.value];
+          check(values.every(v => allowed.has(v)), `${label}: condition references an unknown option on ${target.id}`);
+        }
+      }
+    }
+    for (const q of packet.questions.filter(object)) {
+      if (own(q, 'when')) condition(q.when, q.id);
+      for (const id of Array.isArray(q.requires) ? q.requires : []) check(byId.has(id), `${q.id}: unknown prerequisite ${id}`);
+    }
+    if (own(packet, 'constraints')) check(Array.isArray(packet.constraints), 'constraints must be an array');
+    const ruleIds = new Set();
+    for (const r of Array.isArray(packet.constraints) ? packet.constraints : []) {
+      if (!object(r)) { errors.push('Invalid constraint'); continue; }
+      keys(r, ['id', 'when', 'message', 'internal'], r.id);
+      check(identifier(r.id) && !ruleIds.has(r.id), 'Invalid or duplicate constraint ID'); ruleIds.add(r.id);
+      check(nonempty(r.message), `${r.id}: constraint message required`);
+      condition(r.when, r.id);
+    }
+    if (!errors.length) { try { topological(packet); } catch (e) { errors.push(e.message); } }
+    if (errors.length) throw new Error(errors.join('\n'));
+    return packet;
+  }
+
+  function publicPacket(packet) {
+    validatePacket(packet);
+    const pick = (o, keys) => Object.fromEntries(keys.filter(k => own(o, k)).map(k => [k, clone(o[k])]));
+    const result = pick(packet, ['schema_version', 'packet_id', 'revision', 'title', 'intro', 'coverage_note', 'readiness']);
+    result.questions = packet.questions.map(q => {
+      const v = pick(q, ['id', 'audience', 'owner', 'title', 'section', 'context', 'why', 'recommendation', 'type', 'required', 'allow_other', 'when', 'requires', 'min', 'max', 'unit']);
+      if (q.options) v.options = q.options.map(o => pick(o, ['value', 'label', 'detail']));
+      if (q.columns) v.columns = q.columns.map(c => {
+        const col = pick(c, ['key', 'label', 'type', 'required']);
+        if (c.options) col.options = c.options.map(o => pick(o, ['value', 'label', 'detail']));
+        return col;
+      });
+      return v;
+    });
+    result.contexts = (packet.contexts || []).map(f => pick(f, ['id', 'label', 'status', 'value']));
+    result.constraints = (packet.constraints || []).map(c => pick(c, ['id', 'when', 'message']));
+    return result;
+  }
+
+  function truth(condition, resolve) {
+    if (condition === undefined) return true;
+    if (typeof condition === 'boolean') return condition;
+    if (condition.all) {
+      const values = condition.all.map(x => truth(x, resolve));
+      return values.includes(false) ? false : values.includes(INACTIVE) ? INACTIVE : values.includes(null) ? null : true;
+    }
+    if (condition.any) {
+      const values = condition.any.map(x => truth(x, resolve));
+      return values.includes(true) ? true : values.includes(null) ? null : values.includes(INACTIVE) ? INACTIVE : false;
+    }
+    if (own(condition, 'not')) { const v = truth(condition.not, resolve); return v === null || v === INACTIVE ? v : !v; }
+    const resolved = resolve(condition.question ? 'question' : 'fact', condition.question || condition.fact);
+    if (resolved.state === 'inactive') return INACTIVE;
+    if (resolved.state !== 'known') return null;
+    const a = resolved.value, b = condition.value;
+    switch (condition.op) {
+      case 'answered': return true;
+      case 'eq': return a === b;
+      case 'ne': return a !== b;
+      case 'in': return Array.isArray(b) && b.includes(a);
+      case 'contains': return Array.isArray(a) && a.includes(b);
+      case 'gt': return typeof a === 'number' && a > b;
+      case 'gte': return typeof a === 'number' && a >= b;
+      case 'lt': return typeof a === 'number' && a < b;
+      case 'lte': return typeof a === 'number' && a <= b;
+      default: throw new Error('Unknown condition operator');
+    }
+  }
+
+  function valueErrors(field, value, partial = false) {
+    const errors = [];
+    const empty = value === undefined || value === null || value === '' || (Array.isArray(value) && !value.length);
+    if (empty) return partial || field.required === false ? [] : ['An answer is required.'];
+    if (field.type === 'text' && (typeof value !== 'string' || !value.trim())) errors.push('Enter some text.');
+    if (field.type === 'number') {
+      if (typeof value !== 'number' || !Number.isFinite(value)) errors.push('Enter a valid number.');
+      else {
+        if (!partial && own(field, 'min') && value < field.min) errors.push(`Minimum value: ${field.min}.`);
+        if (!partial && own(field, 'max') && value > field.max) errors.push(`Maximum value: ${field.max}.`);
+      }
+    }
+    const options = new Set((field.options || []).map(o => o.value));
+    if (field.type === 'single' && !options.has(value)) errors.push('This choice is not available for the question.');
+    if (field.type === 'multi' && (!Array.isArray(value) || value.some(v => !options.has(v)) || new Set(value).size !== value.length)) errors.push('The selected options are invalid.');
+    if (field.type === 'table') {
+      if (!Array.isArray(value)) return ['The response table is invalid.'];
+      const keys = new Set(field.columns.map(c => c.key));
+      value.forEach((row, i) => {
+        if (!object(row) || Object.keys(row).some(k => !keys.has(k))) { errors.push(`Row ${i + 1}: invalid column.`); return; }
+        for (const col of field.columns) for (const e of valueErrors(col, row[col.key], partial)) errors.push(`Row ${i + 1}, ${col.label}: ${e}`);
+      });
+    }
+    return errors;
+  }
+
+  function entryErrors(q, answer, partial = false) {
+    if (!object(answer) || !['answered', 'other', 'unknown'].includes(answer.status)) return ['The response status is invalid.'];
+    const errors = [];
+    if (own(answer, 'note') && typeof answer.note !== 'string') errors.push('The note must be text.');
+    if (own(answer, 'answered_by') && typeof answer.answered_by !== 'string') errors.push('The respondent name must be text.');
+    if (answer.status === 'answered') errors.push(...valueErrors({...q, required: true}, answer.value, partial));
+    else {
+      if (own(answer, 'value')) errors.push('Other and Undecided responses must use a note instead of a value.');
+      if (answer.status === 'other' && q.allow_other === false) errors.push('This question does not allow an Other response.');
+      if (!partial && !nonempty(answer.note)) errors.push(answer.status === 'other' ? 'Describe the other rule and give an example.' : 'Describe what is missing or who can confirm it.');
+    }
+    return errors;
+  }
+
+  function expectedBasis(q, answers) {
+    return Object.fromEntries(dependencies(q).map(id => [id, answers[id]?.answer_id || null]));
+  }
+
+  function evaluate(packet, answers = {}) {
+    const states = {}, contexts = new Map((packet.contexts || []).map(f => [f.id, f]));
+    function resolve(kind, id) {
+      if (kind === 'fact') { const f = contexts.get(id); return f?.status === 'confirmed' ? {state: 'known', value: f.value} : {state: 'pending'}; }
+      const s = states[id];
+      if (s?.state === 'inactive') return {state: 'inactive'};
+      return s?.state === 'answered' ? {state: 'known', value: answers[id].value} : {state: 'pending'};
+    }
+    for (const q of topological(packet)) {
+      let applicability = truth(q.when, resolve);
+      if (applicability === INACTIVE) applicability = false;
+      for (const dep of q.requires || []) {
+        if (states[dep]?.state === 'inactive') applicability = false;
+        else if (states[dep]?.state !== 'answered' && applicability !== false) applicability = null;
+      }
+      let state, errors = [];
+      const answer = answers[q.id];
+      if (applicability === false) state = 'inactive';
+      else if (applicability === null) state = 'pending';
+      else if (!answer) state = q.required === false ? 'optional' : 'missing';
+      else {
+        errors = entryErrors(q, answer);
+        if (errors.length) state = 'invalid';
+        else if (canonical(answer.basis || {}) !== canonical(expectedBasis(q, answers))) state = 'needs_review';
+        else state = answer.status;
+      }
+      states[q.id] = {state, applicability, errors};
+    }
+    const conflicts = [], pending_constraints = [];
+    for (const rule of packet.constraints || []) {
+      const active = truth(rule.when, resolve);
+      if (active === true) conflicts.push({id: rule.id, message: rule.message, questions: refs(rule.when)});
+      if (active === null) pending_constraints.push(rule.id);
+    }
+    const counts = {};
+    for (const s of Object.values(states)) counts[s.state] = (counts[s.state] || 0) + 1;
+    const open = packet.questions.filter(q => !['answered', 'inactive', 'optional'].includes(states[q.id].state)).map(q => q.id);
+    return {questions: states, conflicts, pending_constraints, counts, open,
+      ready_for_review: open.length === 0 && conflicts.length === 0 && pending_constraints.length === 0 && packet.readiness === 'ready'};
+  }
+
+  function blankResponse(packet) {
+    return {schema_version: 1, packet_id: packet.packet_id, revision: packet.revision,
+      fingerprint: packet.fingerprint, exported_at: now(), respondent: '', answers: {}, cleared: {}, history: []};
+  }
+
+  function validateResponse(packet, data) {
+    if (!object(data) || data.schema_version !== 1) throw new Error('The response file has an invalid format.');
+    if (data.packet_id !== packet.packet_id || data.revision !== packet.revision || data.fingerprint !== packet.fingerprint) throw new Error('The response file belongs to a different packet or revision. Open the matching HTML file; an agent must reconcile changes across revisions.');
+    if (!object(data.answers) || !Array.isArray(data.history) || typeof data.respondent !== 'string') throw new Error('The response file is missing required data.');
+    const byId = new Map(packet.questions.map(q => [q.id, q]));
+    function checkAnswer(id, answer) {
+      const q = byId.get(id);
+      if (!q) throw new Error(`Question ${id} is not in this packet.`);
+      const errors = entryErrors(q, answer, true);
+      if (!object(answer) || !nonempty(answer.answer_id) || !nonempty(answer.updated_at) || !object(answer.basis)) errors.push('Answer record metadata is missing.');
+      if (object(answer?.basis)) for (const [dep, value] of Object.entries(answer.basis)) {
+        if (!dependencies(q).includes(dep) || !(value === null || nonempty(value))) errors.push('The answer dependency context is invalid.');
+      }
+      if (errors.length) throw new Error(`${id}: ${errors.join(' ')}`);
+    }
+    for (const [id, a] of Object.entries(data.answers)) checkAnswer(id, a);
+    if (data.cleared !== undefined && !object(data.cleared)) throw new Error('Cleared-answer data is invalid.');
+    for (const [id, marker] of Object.entries(data.cleared || {})) {
+      if (!byId.has(id) || own(data.answers, id) || !object(marker) || !nonempty(marker.answer_id) || !nonempty(marker.updated_at)) throw new Error('Cleared-answer data is invalid.');
+    }
+    for (const h of data.history) {
+      if (!object(h) || !nonempty(h.at) || !nonempty(h.reason)) throw new Error('Answer history is invalid.');
+      checkAnswer(h.question_id, h.answer);
+    }
+    return clone(data);
+  }
+
+  function updateAnswer(packet, response, id, entry) {
+    const q = packet.questions.find(x => x.id === id);
+    if (!q) throw new Error('Unknown question');
+    const result = clone(response);
+    result.cleared ||= {};
+    if (entry) {
+      const errors = entryErrors(q, entry, true);
+      if (errors.length) throw new Error(errors.join(' '));
+      const previous = result.answers[id];
+      const payload = a => ({status: a.status, ...(own(a, 'value') ? {value: a.value} : {}), note: a.note || '', answered_by: a.answered_by || ''});
+      const basis = expectedBasis(q, result.answers);
+      if (previous && canonical(payload(previous)) === canonical(payload(entry)) && canonical(previous.basis) === canonical(basis)) return result;
+      if (previous) result.history.push({question_id: id, answer: previous, reason: 'edited', at: now()});
+      result.answers[id] = {...payload(entry), answer_id: stamp(), updated_at: now(), basis};
+      delete result.cleared[id];
+    } else {
+      if (!result.answers[id]) return result;
+      result.history.push({question_id: id, answer: result.answers[id], reason: 'cleared', at: now()});
+      delete result.answers[id];
+      result.cleared[id] = {answer_id: stamp(), updated_at: now()};
+    }
+    // Retain downstream answers, but their recorded basis now differs. The form
+    // asks for explicit reconfirmation; stale values never drive further routing.
+    result.exported_at = now();
+    return result;
+  }
+
+  function mergeResponses(packet, current, incoming, resolutions = {}) {
+    validateResponse(packet, current); validateResponse(packet, incoming);
+    const result = clone(current), conflicts = [];
+    result.cleared ||= {};
+    const signature = a => canonical({status: a.status, value: a.value, note: a.note || '', basis: a.basis, answer_id: a.answer_id});
+    for (const q of topological(packet)) {
+      const a = current.answers[q.id], b = incoming.answers[q.id];
+      const ac = current.cleared?.[q.id], bc = incoming.cleared?.[q.id];
+      if (!b && !bc) continue;
+      const assign = useIncoming => {
+        const value = useIncoming ? b : a, marker = useIncoming ? bc : ac;
+        delete result.answers[q.id]; delete result.cleared[q.id];
+        if (value) result.answers[q.id] = clone(value);
+        if (marker) result.cleared[q.id] = clone(marker);
+      };
+      if (!a && !ac) { assign(true); continue; }
+      if ((a && b && signature(a) === signature(b)) || (ac && bc && canonical(ac) === canonical(bc))) continue;
+      const choice = resolutions[q.id];
+      if (!['current', 'incoming'].includes(choice)) { conflicts.push({id: q.id, current: a || null, incoming: b || null}); continue; }
+      assign(choice === 'incoming');
+      const discarded = choice === 'current' ? b : a;
+      if (discarded) result.history.push({question_id: q.id, answer: clone(discarded), reason: 'merge_not_selected', at: now()});
+    }
+    if (conflicts.length) return {response: null, conflicts};
+    const history = [...result.history, ...incoming.history];
+    result.history = [...new Map(history.map(h => [canonical(h), h])).values()];
+    result.exported_at = now();
+    return {response: result, conflicts: []};
+  }
+
+  function describe(packet, condition) {
+    if (condition === undefined || condition === true) return 'Always applies';
+    if (condition === false) return 'Does not apply in this revision';
+    if (condition.all || condition.any) return '(' + (condition.all || condition.any).map(c => describe(packet, c)).join(condition.all ? ' AND ' : ' OR ') + ')';
+    if (own(condition, 'not')) return 'Not satisfied: ' + describe(packet, condition.not);
+    const q = packet.questions.find(x => x.id === condition.question);
+    const f = (packet.contexts || []).find(x => x.id === condition.fact);
+    const label = q ? q.id : f?.label || condition.fact;
+    const valueLabel = value => q?.options?.find(o => o.value === value)?.label || String(value);
+    const op = {eq: 'is', ne: 'is not', in: 'is one of', contains: 'includes', gt: 'greater than', gte: 'at least', lt: 'less than', lte: 'at most', answered: 'has been answered'}[condition.op];
+    return `${label} ${op}${condition.op === 'answered' ? '' : ' ' + (Array.isArray(condition.value) ? condition.value.map(valueLabel).join(' / ') : valueLabel(condition.value))}`;
+  }
+
+  return {canonical, clone, refs, dependencies, topological, validatePacket, publicPacket,
+    truth, evaluate, valueErrors, entryErrors, expectedBasis, blankResponse,
+    validateResponse, updateAnswer, mergeResponses, describe};
+});
+</script>
+  <script>(function () {
+  'use strict';
+  const Core = window.GrillCore;
+  const packet = JSON.parse(document.getElementById('packet-data').textContent);
+  const $ = id => document.getElementById(id);
+  const el = (tag, text, className) => {
+    const element = document.createElement(tag);
+    if (text !== undefined) element.textContent = text;
+    if (className) element.className = className;
+    return element;
+  };
+  const labels = {answered: 'Answered', missing: 'Needs an answer', optional: 'Optional', pending: 'Waiting for an earlier answer', inactive: 'Not applicable', other: 'Other rule', unknown: 'Undecided', invalid: 'Needs correction', needs_review: 'Needs reconfirmation'};
+  const storageKey = `grill:${packet.packet_id}:${packet.revision}:${packet.fingerprint}`;
+  let response = Core.blankResponse(packet), evaluation, activeTab = 'spec', storageOK = true, pendingImport;
+  const cards = new Map();
+
+  function notice(text, kind = 'error') {
+    $('notice').textContent = text; $('notice').dataset.kind = kind; $('notice').hidden = false;
+  }
+
+  function save() {
+    response.respondent = $('respondent').value;
+    try { localStorage.setItem(storageKey, JSON.stringify(response)); storageOK = true; }
+    catch (_) { storageOK = false; }
+    $('save-status').textContent = storageOK ? 'Draft saved in this browser.' : 'Could not save in this browser. Export your answers to keep this draft.';
+  }
+
+  function selectTab(tab, focus = false) {
+    activeTab = tab;
+    for (const role of ['spec', 'tech']) {
+      $('panel-' + role).hidden = role !== tab;
+      $('tab-' + role).setAttribute('aria-selected', String(role === tab));
+      $('tab-' + role).tabIndex = role === tab ? 0 : -1;
+    }
+    if (focus) $('tab-' + tab).focus();
+  }
+
+  function jump(id) {
+    const q = packet.questions.find(x => x.id === id);
+    if (!q) return;
+    selectTab(q.audience);
+    const card = cards.get(id).article;
+    card.scrollIntoView({block: 'center', behavior: 'auto'}); card.focus({preventScroll: true});
+  }
+
+  function summarize(q, a) {
+    if (!a) return 'Answer cleared';
+    if (a.status !== 'answered') return `${labels[a.status]}: ${a.note || '(no details provided)'}`;
+    const opt = v => q.options?.find(o => o.value === v)?.label || String(v);
+    let value;
+    if (q.type === 'table') value = (a.value || []).map(row => q.columns.map(c => {
+      const raw = row[c.key];
+      const show = v => c.options?.find(o => o.value === v)?.label || String(v ?? '');
+      return `${c.label}: ${Array.isArray(raw) ? raw.map(show).join(', ') : show(raw)}`;
+    }).join(' · ')).join('\n');
+    else value = Array.isArray(a.value) ? a.value.map(opt).join(', ') : opt(a.value ?? '');
+    return value + (a.note ? '\nNote: ' + a.note : '');
+  }
+
+  function makeQuestion(q) {
+    const article = el('article', undefined, 'question'); article.id = 'question-' + q.id; article.tabIndex = -1;
+    const head = el('div', undefined, 'question-head'); head.append(el('span', q.id, 'question-id'));
+    const badge = el('span', '', 'badge'); head.append(badge); article.append(head, el('h3', q.title));
+    article.append(el('p', `Decision owner: ${q.owner}${q.required === false ? ' · Optional' : ''}`, 'owner'));
+    const context = el('p', q.context || '', 'question-context'); context.hidden = !q.context; article.append(context);
+    if (q.when !== undefined || q.requires?.length) {
+      const condition = el('div', undefined, 'condition');
+      const parts = [];
+      if (q.when !== undefined) parts.push(Core.describe(packet, q.when));
+      if (q.requires?.length) parts.push('Requires answers: ' + q.requires.join(', '));
+      condition.append(el('span', 'Answer when: ' + parts.join(' · ')));
+      for (const id of Core.dependencies(q)) {
+        const button = el('button', 'View ' + id); button.type = 'button'; button.addEventListener('click', () => jump(id)); condition.append(button);
+      }
+      article.append(condition);
+    }
+    const pending = el('p', '', 'pending-message'); article.append(pending);
+    const fieldset = el('fieldset'); fieldset.setAttribute('aria-label', 'Answer ' + q.id);
+    const modeRow = el('div', undefined, 'mode-row');
+    const modeLabel = el('label', 'Response type');
+    const mode = el('select'); mode.id = 'mode-' + q.id; mode.setAttribute('aria-label', `${q.id} Response type`);
+    for (const [value, text] of [['answered', 'Answer'], ...(q.allow_other === false ? [] : [['other', 'Other rule']]), ['unknown', 'Undecided']]) {
+      const option = el('option', text); option.value = value; mode.append(option);
+    }
+    modeLabel.append(mode); modeRow.append(modeLabel);
+    const clear = el('button', 'Clear answer', 'clear-button'); clear.type = 'button'; modeRow.append(clear); fieldset.append(modeRow);
+    const fields = el('div'); fields.id = 'fields-' + q.id; fieldset.append(fields);
+    const noteLabel = el('label', 'Notes / exceptions (if any)', 'note-label'); noteLabel.htmlFor = 'note-' + q.id;
+    const note = el('textarea', undefined, 'answer-note'); note.id = 'note-' + q.id; note.rows = 2;
+    fieldset.append(noteLabel, note);
+    const review = el('div', undefined, 'reconfirm'); review.append(el('div', 'An earlier answer changed. Review this response before using it again.'));
+    const confirm = el('button', 'Confirm this answer again', 'secondary'); confirm.type = 'button'; review.append(confirm); fieldset.prepend(review);
+    const errors = el('div', '', 'errors'); errors.setAttribute('aria-live', 'polite'); fieldset.append(errors); article.append(fieldset);
+    if (q.why || q.recommendation) {
+      const details = el('details', undefined, 'details'); details.append(el('summary', 'Decision context'));
+      if (q.why) details.append(el('p', q.why));
+      if (q.recommendation) details.append(el('p', 'Suggestion to consider: ' + q.recommendation));
+      article.append(details);
+    }
+    const card = {q, article, badge, context, pending, fieldset, mode, fields, note, noteLabel, review, errors};
+    cards.set(q.id, card);
+
+    function tableCell(col, value, rowNumber) {
+      let control;
+      if (['single', 'multi'].includes(col.type)) {
+        control = el('select'); control.multiple = col.type === 'multi';
+        if (col.type === 'single') { const empty = el('option', 'Choose…'); empty.value = ''; control.append(empty); }
+        for (const o of col.options) {
+          const option = el('option', o.label); option.value = o.value;
+          option.selected = col.type === 'multi' ? (value || []).includes(o.value) : value === o.value;
+          control.append(option);
+        }
+      } else {
+        control = el('input'); control.type = col.type === 'number' ? 'number' : 'text'; control.value = value ?? '';
+        if (col.type === 'number') control.step = 'any';
+      }
+      control.dataset.column = col.key; control.setAttribute('aria-label', `${q.id} Row ${rowNumber} ${col.label}`);
+      control.addEventListener(col.type === 'single' || col.type === 'multi' ? 'change' : 'input', commit);
+      return control;
+    }
+
+    function tableRow(row, body) {
+      const tr = el('tr'); tr.className = 'answer-row';
+      const rowNumber = body.children.length + 1;
+      for (const col of q.columns) { const td = el('td'); td.append(tableCell(col, row[col.key], rowNumber)); tr.append(td); }
+      const action = el('td'); const remove = el('button', 'Remove'); remove.type = 'button'; remove.setAttribute('aria-label', `${q.id} Remove row ${rowNumber}`);
+      remove.addEventListener('click', () => {
+        tr.remove();
+        [...body.children].forEach((r, i) => {
+          q.columns.forEach(col => r.querySelector(`[data-column="${col.key}"]`).setAttribute('aria-label', `${q.id} Row ${i + 1} ${col.label}`));
+          r.querySelector('button').setAttribute('aria-label', `${q.id} Remove row ${i + 1}`);
+        });
+        commit();
+      });
+      action.append(remove); tr.append(action); body.append(tr);
+    }
+
+    function fillFields(value) {
+      fields.replaceChildren();
+      if (q.type === 'single' || q.type === 'multi') {
+        const options = el('div', undefined, 'options');
+        for (const o of q.options) {
+          const label = el('label', undefined, 'option');
+          const input = el('input'); input.type = q.type === 'single' ? 'radio' : 'checkbox'; input.name = q.id; input.value = o.value;
+          input.checked = q.type === 'single' ? value === o.value : Array.isArray(value) && value.includes(o.value);
+          input.addEventListener('change', commit);
+          const text = el('span', o.label, 'option-text'); if (o.detail) text.append(el('small', o.detail, 'option-detail'));
+          label.append(input, text); options.append(label);
+        }
+        fields.append(options);
+      } else if (q.type === 'table') {
+        const scroll = el('div', undefined, 'table-scroll'), table = el('table'), thead = el('thead'), heading = el('tr'), body = el('tbody');
+        q.columns.forEach(col => heading.append(el('th', col.label))); heading.append(el('th', '')); thead.append(heading); table.append(thead, body); scroll.append(table); fields.append(scroll);
+        for (const row of Array.isArray(value) ? value : []) tableRow(row, body);
+        const add = el('button', '+ Add row', 'table-add'); add.type = 'button'; add.setAttribute('aria-label', `${q.id} Add row`);
+        add.addEventListener('click', () => { tableRow({}, body); commit(); body.lastElementChild.querySelector('input,select')?.focus(); }); fields.append(add);
+      } else {
+        const control = el(q.type === 'text' ? 'textarea' : 'input', undefined, 'answer-input');
+        control.setAttribute('aria-label', q.id + ' Answer');
+        if (q.type === 'number') {
+          control.type = 'number'; control.step = 'any';
+          if (q.min !== undefined) control.min = q.min;
+          if (q.max !== undefined) control.max = q.max;
+        }
+        control.value = value ?? ''; control.addEventListener('input', commit); fields.append(control);
+        if (q.unit) fields.append(el('span', q.unit, 'unit'));
+      }
+    }
+
+    function readValue() {
+      if (q.type === 'single') return fields.querySelector('input:checked')?.value || '';
+      if (q.type === 'multi') return [...fields.querySelectorAll('input:checked')].map(x => x.value);
+      if (q.type === 'table') return [...fields.querySelectorAll('.answer-row')].map(row => Object.fromEntries(q.columns.map(col => {
+        const field = row.querySelector(`[data-column="${col.key}"]`);
+        const value = col.type === 'multi' ? [...field.selectedOptions].map(o => o.value) : col.type === 'number' ? (field.value === '' ? null : Number(field.value)) : field.value;
+        return [col.key, value];
+      })));
+      const input = fields.querySelector('input,textarea');
+      return q.type === 'number' ? (input.value === '' ? null : Number(input.value)) : input.value;
+    }
+
+    function commit() {
+      try {
+        const entry = {status: mode.value, note: note.value, answered_by: $('respondent').value.trim()};
+        if (mode.value === 'answered') entry.value = readValue();
+        const empty = entry.value === '' || entry.value === null || (Array.isArray(entry.value) && !entry.value.length);
+        response = Core.updateAnswer(packet, response, q.id, mode.value === 'answered' && empty && !entry.note ? null : entry);
+        sync(); save();
+      } catch (e) { notice(e.message); }
+    }
+
+    function restore() {
+      const answer = response.answers[q.id]; mode.value = answer?.status || 'answered'; note.value = answer?.note || ''; fillFields(answer?.value);
+    }
+    mode.addEventListener('change', commit); note.addEventListener('input', commit); confirm.addEventListener('click', commit);
+    clear.addEventListener('click', () => { response = Core.updateAnswer(packet, response, q.id, null); restore(); sync(); save(); });
+    card.restore = restore; restore(); return article;
+  }
+
+  function sync() {
+    evaluation = Core.evaluate(packet, response.answers);
+    for (const [id, card] of cards) {
+      const s = evaluation.questions[id];
+      card.article.hidden = s.state === 'inactive'; card.article.dataset.state = s.state;
+      card.badge.textContent = labels[s.state]; card.badge.dataset.state = s.state;
+      card.fieldset.hidden = s.state === 'pending'; card.pending.hidden = s.state !== 'pending';
+      card.context.hidden = !card.q.context || s.state === 'pending';
+      const blockers = Core.dependencies(card.q).filter(dep => evaluation.questions[dep].state !== 'answered').map(dep => {
+        const q = packet.questions.find(x => x.id === dep); return `${dep} (${q.audience === 'spec' ? 'BA' : 'DEV'})`;
+      });
+      card.pending.textContent = blockers.length ? 'Clarify ' + blockers.join(', ') + ' to determine whether this question applies.' : 'Verify the missing information before answering this question.';
+      card.fields.hidden = card.mode.value !== 'answered';
+      card.noteLabel.textContent = card.mode.value === 'other' ? 'Describe the rule, exception, and an example' : card.mode.value === 'unknown' ? 'What is missing / who can confirm it' : 'Notes / exceptions (if any)';
+      card.review.hidden = s.state !== 'needs_review';
+      card.errors.textContent = s.errors.join('\n'); card.errors.hidden = !s.errors.length;
+    }
+    const relevant = packet.questions.filter(q => evaluation.questions[q.id].applicability === true && (q.required !== false || response.answers[q.id]));
+    const answered = relevant.filter(q => evaluation.questions[q.id].state === 'answered').length;
+    $('progress-text').textContent = `${answered} / ${relevant.length} applicable questions answered`;
+    $('progress').max = Math.max(1, relevant.length); $('progress').value = answered;
+    $('overall-status').textContent = evaluation.ready_for_review ? 'Ready for agent review. Decisions still need to be checked against the requirements.' : `${evaluation.open.length} questions still need an answer, confirmation, or clarification${evaluation.conflicts.length ? `; ${evaluation.conflicts.length} conflicts` : ''}.${packet.readiness === 'partial' ? ' Investigation coverage is limited.' : ''}`;
+    $('sidebar-counts').replaceChildren();
+    for (const [label, count] of [['Waiting for a condition', evaluation.counts.pending || 0], ['Needs reconfirmation', evaluation.counts.needs_review || 0], ['Undecided / other', (evaluation.counts.unknown || 0) + (evaluation.counts.other || 0)], ['Not applicable', evaluation.counts.inactive || 0]]) {
+      const row = el('div', undefined, 'count-row'); row.append(el('span', label), el('strong', String(count))); $('sidebar-counts').append(row);
+    }
+    for (const role of ['spec', 'tech']) {
+      const qs = packet.questions.filter(q => q.audience === role && evaluation.questions[q.id].state !== 'inactive');
+      $('count-' + role).textContent = `${qs.filter(q => evaluation.questions[q.id].state === 'answered').length}/${qs.length}`;
+      const empty = $('empty-' + role); if (empty) empty.hidden = qs.length > 0;
+    }
+    $('conflicts').replaceChildren(); $('conflicts').hidden = !evaluation.conflicts.length;
+    if (evaluation.conflicts.length) $('conflicts').append(el('strong', 'Answers need reconciliation'));
+    for (const conflict of evaluation.conflicts) {
+      const p = el('p', conflict.message + ' ');
+      for (const id of conflict.questions) { const b = el('button', id, 'clear-button'); b.addEventListener('click', () => jump(id)); p.append(b); }
+      $('conflicts').append(p);
+    }
+    $('history-count').textContent = `(${response.history.length})`;
+    if ($('history').parentElement.open) renderHistory();
+  }
+
+  function renderHistory() {
+    $('history').replaceChildren();
+    if (!response.history.length) { $('history').append(el('p', 'No changes yet.')); return; }
+    for (const item of response.history.slice().reverse()) {
+      const q = packet.questions.find(x => x.id === item.question_id);
+      const div = el('div', undefined, 'history-entry');
+      div.append(el('strong', item.question_id), el('p', summarize(q, item.answer)), el('p', new Date(item.at).toLocaleString('en-GB'), 'muted'));
+      $('history').append(div);
+    }
+  }
+
+  function finishImport(merged) {
+    response = merged;
+    for (const card of cards.values()) card.restore();
+    sync(); save();
+    notice('Answers imported and reconciled. Review questions marked for reconfirmation.', 'success');
+  }
+
+  function startImport(incoming) {
+    const checked = Core.validateResponse(packet, incoming);
+    const result = Core.mergeResponses(packet, response, checked);
+    if (result.response) { finishImport(result.response); return; }
+    pendingImport = checked; $('merge-items').replaceChildren(); $('merge-error').textContent = '';
+    for (const conflict of result.conflicts) {
+      const q = packet.questions.find(x => x.id === conflict.id);
+      const section = el('section', undefined, 'merge-item'); section.dataset.question = q.id;
+      section.append(el('strong', `${q.id} — ${q.title}`));
+      for (const [value, label, answer] of [['current', 'Current copy', conflict.current], ['incoming', 'Imported copy', conflict.incoming]]) {
+        const choice = el('label'), input = el('input'); input.type = 'radio'; input.name = 'merge-' + q.id; input.value = value;
+        const content = el('div'); content.append(el('strong', label), el('pre', summarize(q, answer)));
+        if (answer) content.append(el('small', `Respondent: ${answer.answered_by || 'Name not provided'} · ${new Date(answer.updated_at).toLocaleString('en-GB')}`));
+        choice.append(input, content); section.append(choice);
+      }
+      $('merge-items').append(section);
+    }
+    $('merge-dialog').showModal();
+  }
+
+  $('title').textContent = packet.title; $('intro').textContent = packet.intro || '';
+  $('version').textContent = 'Revision ' + packet.revision;
+  if (packet.coverage_note) { $('coverage').textContent = packet.coverage_note; $('coverage').hidden = false; }
+  try {
+    const saved = localStorage.getItem(storageKey);
+    if (saved) response = Core.validateResponse(packet, JSON.parse(saved));
+  } catch (e) { storageOK = false; notice('Could not restore the saved draft. Import your response file if you exported one.'); }
+  $('respondent').value = response.respondent;
+  for (const role of ['spec', 'tech']) {
+    let previousSection;
+    for (const q of Core.topological(packet).filter(q => q.audience === role)) {
+      if (q.section && q.section !== previousSection) { $('panel-' + role).append(el('p', q.section, 'section-label')); previousSection = q.section; }
+      $('panel-' + role).append(makeQuestion(q));
+    }
+    const empty = el('p', 'No questions apply to this section yet.', 'empty'); empty.id = 'empty-' + role; $('panel-' + role).append(empty);
+    $('tab-' + role).addEventListener('click', () => selectTab(role));
+    $('tab-' + role).addEventListener('keydown', event => {
+      if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
+        event.preventDefault(); selectTab(event.key === 'Home' ? 'spec' : event.key === 'End' ? 'tech' : activeTab === 'spec' ? 'tech' : 'spec', true);
+      }
+    });
+  }
+  $('respondent').addEventListener('input', save);
+  $('history').parentElement.addEventListener('toggle', () => { if ($('history').parentElement.open) renderHistory(); });
+  $('import-button').addEventListener('click', () => $('import-file').click());
+  $('import-file').addEventListener('change', async event => {
+    const file = event.target.files[0]; if (!file) return;
+    try {
+      if (file.size > 10 * 1024 * 1024) throw new Error('Response file is too large (maximum 10 MB).');
+      startImport(JSON.parse(await file.text()));
+    } catch (e) { notice('Import failed. ' + e.message); }
+    finally { event.target.value = ''; }
+  });
+  $('merge-cancel').addEventListener('click', () => { pendingImport = null; $('merge-dialog').close(); });
+  $('merge-dialog').addEventListener('cancel', () => { pendingImport = null; });
+  $('merge-apply').addEventListener('click', () => {
+    const choices = {};
+    for (const item of $('merge-items').children) {
+      const selected = item.querySelector('input:checked');
+      if (!selected) { $('merge-error').textContent = 'Choose which answer to keep for every question before applying.'; return; }
+      choices[item.dataset.question] = selected.value;
+    }
+    try {
+      const result = Core.mergeResponses(packet, response, pendingImport, choices);
+      if (!result.response) throw new Error('Choose which answer to keep for every conflicting question.');
+      finishImport(result.response); pendingImport = null; $('merge-dialog').close();
+    } catch (e) { $('merge-error').textContent = e.message; }
+  });
+  $('export-button').addEventListener('click', () => {
+    save();
+    const exported = {...response, exported_at: new Date().toISOString(), evaluation: Core.evaluate(packet, response.answers)};
+    const blob = new Blob([JSON.stringify(exported, null, 2) + '\n'], {type: 'application/json'});
+    const url = URL.createObjectURL(blob), a = el('a'); a.href = url;
+    a.download = `${packet.packet_id}-v${packet.revision}-answers.json`.replace(/[^a-zA-Z0-9_.-]/g, '-');
+    document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 30000);
+    notice(`Exported answers from both BA and DEV.${evaluation.open.length ? ` ${evaluation.open.length} questions still need clarification; you can still share this draft.` : ' Send the JSON file with the matching HTML file to the next person.'}`, 'success');
+  });
+  sync();
+  $('save-status').textContent = storageOK ? 'Draft saves automatically as you answer.' : 'Export your answers to keep this draft.';
+})();
+</script>
+</body>
+</html>

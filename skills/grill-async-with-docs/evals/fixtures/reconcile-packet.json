@@ -1,0 +1,411 @@
+{
+  "schema_version": 1,
+  "packet_id": "order-cancellation-demo",
+  "revision": "1",
+  "title": "Order cancellation and refunds",
+  "intro": "Agree on cancellation scope, order-value recalculation, and refund behavior before implementation.",
+  "readiness": "ready",
+  "coverage_note": "An illustrative example with hypothetical data. For a real project, the agent should inspect the specification and code, then replace these questions with project-specific ones.",
+  "questions": [
+    {
+      "id": "S01",
+      "audience": "spec",
+      "owner": "BA / Product",
+      "section": "Cancellation scope",
+      "type": "single",
+      "title": "What cancellation scope should customers have?",
+      "context": "An order can contain multiple items. This answer determines which follow-up rules apply.",
+      "options": [
+        {
+          "value": "none",
+          "label": "Customers cannot cancel orders themselves",
+          "detail": "Employees handle cancellations outside the scope of this investigation."
+        },
+        {
+          "value": "whole",
+          "label": "Cancel the entire order only"
+        },
+        {
+          "value": "partial",
+          "label": "Cancel the entire order or individual items"
+        }
+      ],
+      "internal": {
+        "evidence": [
+          "E01"
+        ],
+        "decision": "Scope, not current implementation"
+      }
+    },
+    {
+      "id": "S02",
+      "audience": "spec",
+      "owner": "BA / Product",
+      "section": "Cancellation scope",
+      "type": "single",
+      "title": "Can a paid order be cancelled?",
+      "when": {
+        "question": "S01",
+        "op": "in",
+        "value": [
+          "whole",
+          "partial"
+        ]
+      },
+      "options": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "id": "S03",
+      "audience": "spec",
+      "owner": "BA / Operations",
+      "section": "Cancellation scope",
+      "type": "multi",
+      "title": "Which order statuses remain eligible for cancellation?",
+      "when": {
+        "question": "S01",
+        "op": "in",
+        "value": [
+          "whole",
+          "partial"
+        ]
+      },
+      "options": [
+        {
+          "value": "new",
+          "label": "Created; not yet being prepared"
+        },
+        {
+          "value": "preparing",
+          "label": "Being prepared"
+        },
+        {
+          "value": "shipped",
+          "label": "Handed to the carrier"
+        }
+      ],
+      "why": "Select every applicable status. If another status applies, choose Other and describe it."
+    },
+    {
+      "id": "S04",
+      "audience": "spec",
+      "owner": "BA / Sales Policy",
+      "section": "Remaining order value",
+      "type": "single",
+      "title": "How should the discount change after a partial cancellation?",
+      "context": "Example: a 600,000 VND order receives a 50,000 VND discount after meeting the 500,000 VND threshold. After one item is cancelled, the remaining items have a list price of only 400,000 VND.",
+      "when": {
+        "question": "S01",
+        "op": "eq",
+        "value": "partial"
+      },
+      "options": [
+        {
+          "value": "keep",
+          "label": "Keep the applied discount"
+        },
+        {
+          "value": "recalculate",
+          "label": "Recalculate the discount based on the remaining items"
+        },
+        {
+          "value": "block",
+          "label": "Block partial cancellation if the remaining items no longer qualify for the discount"
+        }
+      ],
+      "why": "Partial cancellation raises a decision about voucher eligibility. Resolve this rule before calculating the refund amount."
+    },
+    {
+      "id": "S05",
+      "audience": "spec",
+      "owner": "BA / Sales Policy",
+      "section": "Remaining order value",
+      "type": "single",
+      "title": "How should shipping fees be handled for partial cancellation?",
+      "when": {
+        "question": "S01",
+        "op": "eq",
+        "value": "partial"
+      },
+      "options": [
+        {
+          "value": "keep",
+          "label": "Keep the order's shipping fee unchanged"
+        },
+        {
+          "value": "recalculate",
+          "label": "Recalculate based on the remaining items"
+        }
+      ],
+      "context": "If the rule depends on delivery timing or who pays the fee, describe it in the notes."
+    },
+    {
+      "id": "S06",
+      "audience": "spec",
+      "owner": "BA / Finance",
+      "section": "Refunds",
+      "type": "number",
+      "min": 0,
+      "max": 30,
+      "unit": "days",
+      "title": "After a cancellation is approved, how soon should the refund be issued?",
+      "when": {
+        "all": [
+          {
+            "question": "S01",
+            "op": "in",
+            "value": [
+              "whole",
+              "partial"
+            ]
+          },
+          {
+            "question": "S02",
+            "op": "eq",
+            "value": "yes"
+          }
+        ]
+      },
+      "context": "Enter the maximum number of days. Use 0 for a same-day refund; specify calendar or business days in the notes."
+    },
+    {
+      "id": "S07",
+      "audience": "spec",
+      "owner": "BA / Operations",
+      "section": "Participants",
+      "type": "table",
+      "title": "How can each role request and approve a cancellation?",
+      "when": {
+        "question": "S01",
+        "op": "in",
+        "value": [
+          "whole",
+          "partial"
+        ]
+      },
+      "context": "Add one row for each role. Enter its rules in the same row so roles and their count do not need to be predicted in advance.",
+      "columns": [
+        {
+          "key": "role",
+          "label": "Role",
+          "type": "text"
+        },
+        {
+          "key": "can_request",
+          "label": "Can request cancellation?",
+          "type": "single",
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes"
+            },
+            {
+              "value": "no",
+              "label": "No"
+            }
+          ]
+        },
+        {
+          "key": "approval",
+          "label": "Approver / approval conditions",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "S08",
+      "audience": "spec",
+      "owner": "BA / Product",
+      "section": "Refunds",
+      "type": "single",
+      "title": "Is a “Refund processing” status acceptable?",
+      "when": {
+        "question": "S02",
+        "op": "eq",
+        "value": "yes"
+      },
+      "context": "The system has accepted the request but has not received a result from the payment provider. This is a user-experience decision.",
+      "options": [
+        {
+          "value": "yes",
+          "label": "Yes; show the status and update it when the result arrives"
+        },
+        {
+          "value": "no",
+          "label": "No; agree on a different behavior before implementation"
+        }
+      ]
+    },
+    {
+      "id": "S09",
+      "audience": "spec",
+      "owner": "BA / Operations",
+      "section": "Exceptions",
+      "type": "text",
+      "title": "If an order has shipped, what conditions determine whether cancellation is accepted?",
+      "when": {
+        "question": "S03",
+        "op": "contains",
+        "value": "shipped"
+      },
+      "context": "Describe who confirms the return, who pays any fees, and when the case moves to the returns process."
+    },
+    {
+      "id": "T01",
+      "audience": "tech",
+      "owner": "DEV / Payment Integrations",
+      "section": "Integration capability",
+      "type": "single",
+      "title": "Does the payment provider currently support multiple refunds for one transaction?",
+      "context": "This example does not include provider documentation for the agent to verify. DEV should check the contract/API and record the source in the notes; choose Undecided if the information is unavailable.",
+      "options": [
+        {
+          "value": "yes",
+          "label": "Yes, verified"
+        },
+        {
+          "value": "no",
+          "label": "No, verified"
+        }
+      ]
+    },
+    {
+      "id": "T02",
+      "audience": "tech",
+      "owner": "DEV / Tech lead",
+      "section": "Refund processing",
+      "type": "single",
+      "title": "How will the refund flow return its result?",
+      "when": {
+        "question": "S02",
+        "op": "eq",
+        "value": "yes"
+      },
+      "options": [
+        {
+          "value": "sync",
+          "label": "Process synchronously within the request"
+        },
+        {
+          "value": "async",
+          "label": "Accept the request, process it in the background, then update the status"
+        }
+      ],
+      "context": "Check the integration capability against the behavior BA requested in S08."
+    },
+    {
+      "id": "T03",
+      "audience": "tech",
+      "owner": "DEV / Tech lead",
+      "section": "Refund processing",
+      "type": "text",
+      "title": "How will duplicate refunds be prevented and failures recovered?",
+      "when": {
+        "question": "S02",
+        "op": "eq",
+        "value": "yes"
+      },
+      "requires": [
+        "T02"
+      ],
+      "context": "Describe the idempotency key, persisted state, retry behavior, and reconciliation process."
+    },
+    {
+      "id": "T04",
+      "audience": "tech",
+      "owner": "DEV / Tech lead",
+      "section": "Per-item data",
+      "type": "text",
+      "title": "What data changes are needed to represent cancelled items and allocated amounts?",
+      "when": {
+        "question": "S01",
+        "op": "eq",
+        "value": "partial"
+      },
+      "requires": [
+        "S04",
+        "S05"
+      ],
+      "context": "Assumed example behavior: payments are recorded for the whole order. Use the BA's selected rules to propose a representation and check consistency."
+    }
+  ],
+  "constraints": [
+    {
+      "id": "C01",
+      "when": {
+        "all": [
+          {
+            "question": "S08",
+            "op": "eq",
+            "value": "no"
+          },
+          {
+            "question": "T02",
+            "op": "eq",
+            "value": "async"
+          }
+        ]
+      },
+      "message": "BA rejected a pending status, but DEV chose background processing. Align on the expected behavior before implementation."
+    }
+  ],
+  "internal": {
+    "scout_log": [
+      {
+        "id": "E01",
+        "kind": "illustration",
+        "hypothesis": "If individual items can be cancelled",
+        "sources": [
+          "Hypothetical illustration, not project data"
+        ],
+        "finding": "Threshold-based vouchers and order-level fees create additional decisions",
+        "questions": [
+          "S04",
+          "S05",
+          "T04"
+        ]
+      }
+    ],
+    "coverage": [
+      {
+        "topic": "Whole-order cancellation",
+        "status": "covered",
+        "questions": [
+          "S02",
+          "S03",
+          "S06",
+          "S07",
+          "S08",
+          "T02",
+          "T03"
+        ],
+        "stop_reason": "The example's key decisions are represented"
+      },
+      {
+        "topic": "Partial cancellation",
+        "status": "covered",
+        "questions": [
+          "S04",
+          "S05",
+          "T04"
+        ],
+        "stop_reason": "Questions about discounts, fees, and allocation have been added"
+      }
+    ],
+    "open_items": [
+      {
+        "description": "Hypothetical example; inspect real sources before applying this to a project",
+        "owner": "Agent",
+        "impact": "Do not treat example answers as project decisions"
+      }
+    ]
+  }
+}
